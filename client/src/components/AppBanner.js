@@ -31,7 +31,9 @@ export default function AppBanner() {
     const handleLogout = () => {
         handleMenuClose();
         auth.logoutUser();
-    }
+        store.closeCurrentList();
+    };
+
 
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
@@ -70,6 +72,7 @@ export default function AppBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
@@ -84,7 +87,7 @@ export default function AppBanner() {
     
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
-        console.log("userInitials: " + userInitials);
+        //console.log("userInitials: " + userInitials);
         if (loggedIn) 
             return <div>{userInitials}</div>;
         else

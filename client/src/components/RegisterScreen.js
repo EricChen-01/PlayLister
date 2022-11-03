@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import AuthContext from '../auth'
 import Copyright from './Copyright'
+import MUIRegisterError from './MUIRegisterError'
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -13,12 +14,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+
 export default function RegisterScreen() {
     const { auth } = useContext(AuthContext);
 
     const handleSubmit = (event) => {
+        console.log('submit clicked');
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
+        
         auth.registerUser(
             formData.get('firstName'),
             formData.get('lastName'),
@@ -26,8 +30,8 @@ export default function RegisterScreen() {
             formData.get('password'),
             formData.get('passwordVerify')
         );
+        
     };
-
     return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -119,6 +123,7 @@ export default function RegisterScreen() {
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 5 }} />
+                <MUIRegisterError></MUIRegisterError>
             </Container>
     );
 }

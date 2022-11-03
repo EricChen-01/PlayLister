@@ -47,4 +47,14 @@ const apis = {
     logoutUser
 }
 
+// this intercepts any errors status
+api.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async function (error) {
+        return error;
+    }
+);
+
 export default apis

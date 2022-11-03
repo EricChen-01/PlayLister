@@ -21,6 +21,7 @@ function WorkspaceScreen() {
         modalJSX = <MUIEditSongModal />;
     }
     else if (store.isRemoveSongModalOpen()) {
+        console.log('isRemoveSongModal is true')
         modalJSX = <MUIRemoveSongModal />;
     }
     return (

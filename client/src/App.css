@@ -38,7 +38,7 @@ body {
   left: 0%;
 }
 
-#top5-banner {
+#list-banner {
   position: absolute;
   left: 0%;
   top: 0%;
@@ -74,8 +74,8 @@ body {
   float: right;
 }
 
-.top5-button,
-.top5-button-disabled {
+.playlister-button,
+.playlister-button-disabled {
   font-size: 36pt;
   border-width: 0px;
   float: left;
@@ -84,17 +84,17 @@ body {
   opacity: 100%;
 }
 
-.top5-button:hover {
+.playlister-button:hover {
   cursor: pointer;
   color: black;
 }
 
-.top5-button-disabled {
+.playlister-button-disabled {
   opacity: 0.25;
   cursor: not-allowed;
 }
 
-#top5-list-selector {
+#song-list-selector {
   position: absolute;
   left: 0%;
   top: 10%;
@@ -103,7 +103,7 @@ body {
   background-color: var(--swatch-primary);
 }
 
-#top5-workspace {
+#playlister-workspace {
   position: absolute;
   left: 0%;
   top: 10%;
@@ -112,7 +112,7 @@ body {
   background-color: var(--swatch-accent);
 }
 
-#top5-statusbar {
+#playlist-statusbar {
   position: absolute;
   left: 0%;
   top: 90%;
@@ -127,9 +127,9 @@ body {
 
 #list-selector-heading {
   position: absolute;
-  left: 0%;
+  left: 25%;
   top: 0%;
-  width: 100%;
+  width: 50%;
   height: 10%;
   text-align: center;
   font-size: 24pt;
@@ -218,9 +218,9 @@ body {
   background-color: var(--swatch-primary);
 }
 
-.item-number,
-.top5-item,
-.top5-item-dragged-to {
+.song-number,
+.song-item,
+.song-item-dragged-to {
   display: flex;
   align-items: center;
   font-size: 48pt;
@@ -240,16 +240,16 @@ input {
   font-size: 20pt;
 }
 
-.top5-item,
-.top5-item-dragged-to {
+.song-item,
+.song-item-dragged-to {
   text-align: left;
   width: 95%;
   padding-left: 5%;
 }
-.top5-item {
+.song-item {
   background-color: var(--swatch-complement);
 }
-.top5-item-dragged-to {
+.song-item-dragged-to {
   background-color: var(--swatch-accent);
 }
 

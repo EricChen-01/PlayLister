@@ -95,6 +95,7 @@ logoutUser = async (req, res) => {
 }
 
 registerUser = async (req, res) => {
+    console.log('here in register user controller')
     try {
         const { firstName, lastName, email, password, passwordVerify } = req.body;
         console.log("create user: " + firstName + " " + lastName + " " + email + " " + password + " " + passwordVerify);
