@@ -17,15 +17,23 @@ createPlaylist = (req, res) => {
             error: 'You must provide a Playlist',
         })
     }
-
     const playlist = new Playlist(body);
     console.log("playlist: " + playlist.toString());
     if (!playlist) {
         return res.status(400).json({ success: false, error: err })
     }
-
     User.findOne({ _id: req.userId }, (err, user) => {
         console.log("user found: " + JSON.stringify(user));
+
+        // does this new playlist email match this user's email?
+        console.log("user : " + user.email)
+        console.log("req : " + body.ownerEmail)
+        if(user.email != body.ownerEmail) {
+            return res.status(400).json({
+                errorMessage: 'Playlist Not Created! can not modify other user playlist'
+            })
+        }
+
         user.playlists.push(playlist._id);
         user
             .save()
@@ -66,6 +74,9 @@ deletePlaylist = async (req, res) => {
                     Playlist.findOneAndDelete({ _id: req.params.id }, () => {
                         return res.status(200).json({success:true});
                     }).catch(err => console.log(err))
+                    console.log("user playlist ids: "+user.playlists);
+                    user.playlists = user.playlists.filter((value,_) => value != req.params.id);
+                    user.save();
                 }
                 else {
                     console.log("incorrect user!");
@@ -143,10 +154,9 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getPlaylists = async (req, res) => {
-    // IS THIS A VALID USER
-    
-
-    await Playlist.find({}, (err, playlists) => {
+    user = await getUser(req.userId);
+    email = user.email;
+    await Playlist.find({ownerEmail: email}, (err, playlists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -217,6 +227,19 @@ updatePlaylist = async (req, res) => {
         asyncFindUser(playlist);
     })
 }
+
+getUser = async (id) =>{
+    user = User.findById(id,(err,user) => {
+        if(err){
+            console.log('not found user')
+            return null
+        }
+        console.log("found user: "+user);
+        return user
+    }) 
+    return user;
+}
+
 module.exports = {
     createPlaylist,
     deletePlaylist,
