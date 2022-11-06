@@ -6,6 +6,8 @@ import MUIRemoveSongModal from './MUIRemoveSongModal'
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import { GlobalStoreContext } from '../store/index.js'
+import {AuthContextProvider} from '../auth/'
+
 /*
     This React component lets us edit a loaded list, which only
     happens when we are on the proper route.
@@ -13,9 +15,14 @@ import { GlobalStoreContext } from '../store/index.js'
     @author McKilla Gorilla
 */
 function WorkspaceScreen() {
-    const { store } = useContext(GlobalStoreContext);
+    const { store, auth } = useContext(GlobalStoreContext,AuthContextProvider);
     store.history = useHistory();
     
+    if (!store.currentList){
+        store.history.push("/");
+        return null
+    }
+
     let modalJSX = "";
     if (store.isEditSongModalOpen()) {
         modalJSX = <MUIEditSongModal />;

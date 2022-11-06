@@ -64,7 +64,7 @@ function GlobalStoreContextProvider(props) {
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
-    //console.log("auth: " + auth);
+    console.log("auth: " + JSON.stringify(auth));
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // HANDLE EVERY TYPE OF STATE CHANGE
