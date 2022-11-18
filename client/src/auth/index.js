@@ -4,8 +4,6 @@ import api from './auth-request-api'
 
 const AuthContext = createContext();
 
-
-// THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
 export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
@@ -32,6 +30,7 @@ function AuthContextProvider(props) {
     const history = useHistory();
 
     useEffect(() => {
+        console.log("GETTING LOGGED IN")
         auth.getLoggedIn();
     }, []);
 
@@ -113,9 +112,7 @@ function AuthContextProvider(props) {
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        console.log('in registerUser')
         const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
-        console.log('past response')
         if (response.status === 200) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
@@ -133,11 +130,9 @@ function AuthContextProvider(props) {
     }
 
     auth.loginUser = async function(email, password) {
-        console.log('logging in')
         const response = await api.loginUser(email, password);
         //console.log(response.request.status) <-- this gets status code regardless if theres error
         if (response.status === 200) {
-            console.log('status === 200');
             authReducer({
                 type: AuthActionType.LOGIN_USER,
                 payload: {
@@ -170,7 +165,6 @@ function AuthContextProvider(props) {
             initials += auth.user.firstName.charAt(0);
             initials += auth.user.lastName.charAt(0);
         }
-        //console.log("user initials: " + initials);
         return initials;
     }
 
