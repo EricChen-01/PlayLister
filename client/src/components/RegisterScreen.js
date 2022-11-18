@@ -14,6 +14,7 @@ export default function RegisterScreen(){
                 <LockIcon/>
             </Avatar>
             Register
+            <Button pill variant='contained'>SIGN UP</Button>
         </Box>
     )
 }
