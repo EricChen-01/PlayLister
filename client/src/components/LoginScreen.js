@@ -8,9 +8,9 @@ import LockIcon from '@mui/icons-material/Lock';
 import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-export default function RegisterScreen(){
-    const {auth} = useContext(AuthContext);
-    console.log("RegisterScreen auth.loggedIn: " + auth.loggedIn);
+export default function LoginScreen(){
+    const { auth } = useContext(AuthContext);
+    console.log("LoginScreen auth.loggedIn: " + auth.loggedIn);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -21,9 +21,10 @@ export default function RegisterScreen(){
         });
     };
     
-    let registerScreen = "You are logged in. Unable to go to register screen";
-    if (!auth.loggedIn){
-        registerScreen = 
+
+    let loginScreen = "You are logged in. Please log out to login"
+    if(!auth.loggedIn) {        
+        loginScreen = 
         <Container component="main" maxWidth="xs" style={{border: '5px solid black', borderRadius: '10px'}}>
             <CssBaseline />
             <Box sx={{marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
@@ -31,16 +32,10 @@ export default function RegisterScreen(){
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                    Log in
                 </Typography>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField autoComplete="given-name" name="firstName" required fullWidth id="firstName" label="First Name" autoFocus/>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField required fullWidth id="lastName" label="Last Name" name="lastName" autoComplete="family-name"/>
-                        </Grid>
                         <Grid item xs={12}>
                             <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email"/>
                         </Grid>
@@ -49,12 +44,12 @@ export default function RegisterScreen(){
                         </Grid>
                     </Grid>
                     <Button pill type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} >
-                        Sign Up
+                        Login
                     </Button>
                     <Grid container justifyContent="flex-end">
                     <Grid item>
-                        <Link href="/login" variant="body2">
-                            Already have an account? Sign in
+                        <Link href="/register" variant="body2">
+                            Don't have an account? Create an account
                         </Link>
                     </Grid>
                     </Grid>
@@ -65,8 +60,8 @@ export default function RegisterScreen(){
 
     return(
         <Grid container className='Screen'>
-            <Grid item style={{margin:'auto auto auto',backgroundColor:'rgb(240, 240, 240)', borderRadius: '10px'}}>
-                {registerScreen}
+            <Grid item style={{margin:'auto auto auto',backgroundColor:'rgb(240, 240, 240)', borderRadius:'10px'}}>
+                {loginScreen}
             </Grid>
         </Grid>
         
