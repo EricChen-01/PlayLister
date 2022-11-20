@@ -1,7 +1,7 @@
 import React, {useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom'
 import AuthContext from '../auth';
-import {Icon, Grid,AppBar, Toolbar, Container,Box, Link, IconButton, Menu, MenuItem, Avatar} from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
+import {Icon, Grid,AppBar, Toolbar, Container,Box, Link, Typography, Menu, MenuItem, Avatar} from '@mui/material'
 import Button from './PillButton'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import {KeyboardArrowDown} from '@mui/icons-material';
@@ -11,17 +11,23 @@ export default function AppBanner(){
     const {auth} = useContext(AuthContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const history = useHistory();
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     }
-    const handleMenuClose = (event) => {
+    const handleMenuClose = () => {
         setAnchorEl(null);
     }
-    const handleLogOut = (event) => {
-        
+    const handleLogOut = () => {
+        auth.logoutUser();
     }
-
+    const goToLogin = () => {
+        history.push('/login')
+    }
+    const goToRegister = () => {
+        history.push('/register')
+    }
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         if (loggedIn) 
@@ -34,14 +40,13 @@ export default function AppBanner(){
     if (!auth.loggedIn){
         menuItems = 
             <Box>
-                <MenuItem onClick={handleMenuClose}><Link href="/login">Login</Link></MenuItem>
-                <MenuItem onClick={handleMenuClose}><Link href="/register">Register</Link></MenuItem>
-                <MenuItem onClick={handleMenuClose}><Link href="/">Use as Guest</Link></MenuItem>
+                <MenuItem onClick={handleMenuClose}><Typography onClick={goToLogin}>Login</Typography></MenuItem>
+                <MenuItem onClick={handleMenuClose}><Typography onClick={goToRegister}>Register</Typography></MenuItem>
             </Box>
     }else{
         menuItems=
         <Box>
-            <MenuItem onClick={handleMenuClose}><Link href='/' onClick={handleLogOut}>Log Out</Link></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Typography onClick={handleLogOut}>Log Out</Typography></MenuItem>
         </Box>
     }
 

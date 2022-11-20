@@ -1,5 +1,4 @@
 import {useContext} from 'react';
-import useHistory from 'react-dom'
 import AuthContext from '../auth'
 import {Container ,Grid, Typography, Box, TextField, FormControlLabel,Checkbox,Link} from '@mui/material'
 import Button from './PillButton'
@@ -19,6 +18,13 @@ export default function RegisterScreen(){
           email: data.get('email'),
           password: data.get('password'),
         });
+        auth.registerUser(
+            data.get('firstName'),
+            data.get('lastName'),
+            data.get('email'),
+            data.get('password'),
+            data.get('passwordVerify')
+        );
     };
     
     let registerScreen = "You are logged in. Unable to go to register screen";
@@ -46,6 +52,9 @@ export default function RegisterScreen(){
                         </Grid>
                         <Grid item xs={12}>
                             <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password"/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField required fullWidth name="passwordVerify" label="password Verify" type="password" id="passwordVerify" autoComplete="new-password"/>
                         </Grid>
                     </Grid>
                     <Button pill type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} >

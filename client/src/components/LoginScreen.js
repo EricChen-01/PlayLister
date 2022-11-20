@@ -1,5 +1,4 @@
 import {useContext} from 'react';
-import useHistory from 'react-dom'
 import AuthContext from '../auth'
 import {Container ,Grid, Typography, Box, TextField, FormControlLabel,Checkbox,Link} from '@mui/material'
 import Button from './PillButton'
@@ -19,6 +18,10 @@ export default function LoginScreen(){
           email: data.get('email'),
           password: data.get('password'),
         });
+        auth.loginUser(
+            data.get('email'),
+            data.get('password')
+        );
     };
     
 

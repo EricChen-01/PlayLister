@@ -37,15 +37,18 @@ const styles = {
 export default function SplashScreen() {
     const { auth} = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
-    store.history = useHistory();
 
+    const history = useHistory();
     const handleContinueAsGuest = (event) => {
-        store.history.push('/')
+        auth.useAsGuest();
+        history.push('/');
+
     };
 
     const handleLogin = (event) => {
-        store.history.push('/login');
+        history.push('/login');
     };
+ 
 
     const main = 
     <Grid container direction="column">
@@ -78,7 +81,7 @@ export default function SplashScreen() {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button pill variant='contained'>
+                        <Button pill variant='contained' onClick={handleContinueAsGuest}>
                             Continue As Guest
                         </Button>
                     </Grid>

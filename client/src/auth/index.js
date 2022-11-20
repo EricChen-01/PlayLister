@@ -13,6 +13,7 @@ export const AuthActionType = {
     LOGIN_ERROR: "LOGIN_ERROR",
     REGISTER_ERROR: "REGISTER_ERROR",
     HIDE_MODALS: "HIDE_MODALS",
+    GUEST_LOGIN: "GUEST_LOGIN"
 }
 
 const CurrentModal = {
@@ -25,12 +26,12 @@ function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
         loggedIn: false,
-        currentModal: CurrentModal.NONE
+        currentModal: CurrentModal.NONE,
+        guest: false
     });
     const history = useHistory();
 
     useEffect(() => {
-        console.log("GETTING LOGGED IN")
         auth.getLoggedIn();
     }, []);
 
@@ -38,60 +39,76 @@ function AuthContextProvider(props) {
         const { type, payload } = action;
         switch (type) {
             case AuthActionType.GET_LOGGED_IN: {
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    currentModal: CurrentModal.NONE
-                });
+                    currentModal: CurrentModal.NONE,
+                    guest: false
+                }));
             }
             case AuthActionType.LOGIN_USER: {
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: payload.user,
                     loggedIn: true,
-                    currentModal: CurrentModal.NONE
-                })
+                    currentModal: CurrentModal.NONE,
+                    guest: false
+                }))
             }
             case AuthActionType.LOGOUT_USER: {
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: null,
                     loggedIn: false,
-                    currentModal: CurrentModal.NONE
-                })
+                    currentModal: CurrentModal.NONE,
+                    guest: false
+                }))
             }
             case AuthActionType.REGISTER_USER: {
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: payload.user,
                     loggedIn: true,
-                    currentModal: CurrentModal.NONE
-                })
+                    currentModal: CurrentModal.NONE,
+                    guest: false
+                }))
             }
             case AuthActionType.SET_LOGGED_IN:{
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    currentModal: CurrentModal.NONE
-                })
+                    currentModal: CurrentModal.NONE,
+                    guest: false
+                }))
             }
             case AuthActionType.LOGIN_ERROR:{
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: null,
                     loggedIn: false,
-                    currentModal: CurrentModal.LOGIN_ERROR
-                })
+                    currentModal: CurrentModal.LOGIN_ERROR,
+                    guest: false
+                }))
             }
             case AuthActionType.HIDE_MODALS: {
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: null,
                     loggedIn: false,
-                    currentModal: CurrentModal.NONE
-                })
+                    currentModal: CurrentModal.NONE,
+                    guest: false
+                }))
             }
             case AuthActionType.REGISTER_ERROR:{
-                return setAuth({
+                return setAuth((prevState)=>({
                     user: null,
                     loggedIn: false,
-                    currentModal: CurrentModal.REGISTER_ERROR
-                })
+                    currentModal: CurrentModal.REGISTER_ERROR,
+                    guest: false
+                }))
+            }
+            case AuthActionType.GUEST_LOGIN:{
+                return setAuth((prevState)=>({
+                    user: null,
+                    loggedIn: false,
+                    currentModal: CurrentModal.NONE,
+                    guest: true
+                }))
             }
             default:
                 return auth;
@@ -109,6 +126,13 @@ function AuthContextProvider(props) {
                 }
             });
         }
+    }
+
+    auth.useAsGuest = function () {
+        authReducer({
+            type: AuthActionType.GUEST_LOGIN,
+            payload:{}
+        })
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
