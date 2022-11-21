@@ -35,6 +35,7 @@ api.interceptors.response.use(
         return response;
     },
     async function (error) {
+        //console.log(error.response.data.errorMessage)
         return error;
     }
 );

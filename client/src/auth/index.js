@@ -27,7 +27,8 @@ function AuthContextProvider(props) {
         user: null,
         loggedIn: false,
         currentModal: CurrentModal.NONE,
-        guest: false
+        guest: false,
+        errorMessage: null
     });
     const history = useHistory();
 
@@ -43,7 +44,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: payload.loggedIn,
                     currentModal: CurrentModal.NONE,
-                    guest: false
+                    guest: false,
+                    errorMessage: null
                 }));
             }
             case AuthActionType.LOGIN_USER: {
@@ -51,7 +53,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: true,
                     currentModal: CurrentModal.NONE,
-                    guest: false
+                    guest: false,
+                    errorMessage: null
                 }))
             }
             case AuthActionType.LOGOUT_USER: {
@@ -59,7 +62,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentModal: CurrentModal.NONE,
-                    guest: false
+                    guest: false, 
+                    errorMessage: null
                 }))
             }
             case AuthActionType.REGISTER_USER: {
@@ -67,7 +71,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: true,
                     currentModal: CurrentModal.NONE,
-                    guest: false
+                    guest: false, 
+                    errorMessage: null
                 }))
             }
             case AuthActionType.SET_LOGGED_IN:{
@@ -75,7 +80,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: payload.loggedIn,
                     currentModal: CurrentModal.NONE,
-                    guest: false
+                    guest: false,
+                    errorMessage: null
                 }))
             }
             case AuthActionType.LOGIN_ERROR:{
@@ -83,7 +89,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentModal: CurrentModal.LOGIN_ERROR,
-                    guest: false
+                    guest: false, 
+                    errorMessage: payload.message
                 }))
             }
             case AuthActionType.HIDE_MODALS: {
@@ -91,7 +98,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentModal: CurrentModal.NONE,
-                    guest: false
+                    guest: false,
+                    errorMessage: null
                 }))
             }
             case AuthActionType.REGISTER_ERROR:{
@@ -99,7 +107,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentModal: CurrentModal.REGISTER_ERROR,
-                    guest: false
+                    guest: false, 
+                    errorMessage: payload.message
                 }))
             }
             case AuthActionType.GUEST_LOGIN:{
@@ -107,7 +116,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentModal: CurrentModal.NONE,
-                    guest: true
+                    guest: true, 
+                    errorMessage: null
                 }))
             }
             default:
@@ -148,7 +158,9 @@ function AuthContextProvider(props) {
         }else{
             authReducer({
                 type: AuthActionType.REGISTER_ERROR,
-                payload: {}
+                payload: {
+                    message: JSON.parse(response.request.response).errorMessage
+                }
             })
         }
     }
@@ -165,9 +177,13 @@ function AuthContextProvider(props) {
             })
             history.push("/");
         }else{
+            //response.data.errorMessage
+            
             authReducer({
                 type: AuthActionType.LOGIN_ERROR,
-                payload: {}
+                payload: {
+                    message: JSON.parse(response.request.response).errorMessage
+                }
             })
         }
     }
@@ -197,6 +213,14 @@ function AuthContextProvider(props) {
             type: AuthActionType.HIDE_MODALS,
             payload: {}
         });
+    }
+
+    auth.getUserFirstName = function() {
+        let name = "";
+        if (auth.user) {
+            name += auth.user.firstName
+        }
+        return name;
     }
 
     return (

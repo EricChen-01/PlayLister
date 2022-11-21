@@ -28,12 +28,19 @@ export default function AppBanner(){
     const goToRegister = () => {
         history.push('/register')
     }
-    function getAccountMenu(loggedIn) {
+    function getAccountAvatar(loggedIn) {
         let userInitials = auth.getUserInitials();
         if (loggedIn) 
             return <div>{userInitials}</div>;
         else
             return <AccountCircle fontSize='large'/>;
+    }
+    function getAccountText(loggedIn){
+        let userFirstName = auth.getUserFirstName();
+        if (loggedIn) 
+            return userFirstName
+        else
+            return 'GUEST'
     }
 
     let menuItems ="";
@@ -51,19 +58,24 @@ export default function AppBanner(){
     }
 
     return(
-        <AppBar position="static">
-            <Container maxWidth="xl">
+        <AppBar position="static" style={{backgroundColor:"#f9f6f0"}}>
+            <Container maxWidth={false}>
                 <Toolbar disableGutters>
-                    <Grid container sx={{justifyContent:'space-between'}}>
-                        <Icon fontSize='large' sx={{fontSize:'4em'}}><Link href="/"><img src={logo} width={'100%'} height={'100%'}/></Link></Icon>
-                        <Box>   
-                            <Button pill variant="contained" onClick={handleMenuOpen} endIcon={<KeyboardArrowDown/>}>
-                                <Avatar sx={{ width: 31, height: 31,bgcolor:'Gray'}}>{getAccountMenu(auth.loggedIn)}</Avatar>
-                            </Button>
-                            <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose} MenuListProps={{ 'aria-labelledby': 'basic-button',}}>
-                                {menuItems}
-                            </Menu>
-                        </Box>
+                    <Grid container justifyContent='space-between' alignItems="center">
+                        <Grid item>
+                            <Icon fontSize='large' sx={{fontSize:'4em'}}><Link href="/"><img src={logo} width={'100%'} height={'100%'}/></Link></Icon>
+                        </Grid>
+                        <Grid item >
+                            <Box >   
+                                <Button pill variant="contained" onClick={handleMenuOpen} sx={{boxShadow:10}} endIcon={<KeyboardArrowDown/>}>
+                                    <Avatar sx={{ width: 31, height: 31,bgcolor:'Gray'}}>{getAccountAvatar(auth.loggedIn)}</Avatar> 
+                                    <Typography>{getAccountText(auth.loggedIn)}</Typography>
+                                </Button>
+                                <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose} MenuListProps={{ 'aria-labelledby': 'basic-button',}}>
+                                    {menuItems}
+                                </Menu>
+                            </Box>
+                        </Grid>
                     </Grid>
                 </Toolbar>
             </Container>

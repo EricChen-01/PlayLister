@@ -31,6 +31,9 @@ const styles = {
         position:'relative',
         bottom:'15px',
         fontSize:'10px'
+    },
+    boxShadow: {
+        boxShadow:'23'
     }
 }
 
@@ -76,12 +79,12 @@ export default function SplashScreen() {
             <Box sx={{marginTop:'25%',marginBottom:'25%'}}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <Button pill variant='contained' onClick={handleLogin}>
+                        <Button pill variant='contained' onClick={handleLogin} sx={{boxShadow:23}}>
                             Log in
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button pill variant='contained' onClick={handleContinueAsGuest}>
+                        <Button pill variant='contained' onClick={handleContinueAsGuest} sx={{boxShadow:23}}>
                             Continue As Guest
                         </Button>
                     </Grid>

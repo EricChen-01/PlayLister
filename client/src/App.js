@@ -3,6 +3,7 @@ import { React } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AuthContextProvider } from './auth';
 import { GlobalStoreContextProvider } from './store'
+import CssBaseline from '@mui/material/CssBaseline';
 import {
     HomeWrapper,
     RegisterScreen,
@@ -14,7 +15,8 @@ const App = () => {
     return (
         <BrowserRouter>
             <AuthContextProvider>
-                <GlobalStoreContextProvider>    
+                <GlobalStoreContextProvider>   
+                    <CssBaseline/>
                     <AppBanner/>         
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />

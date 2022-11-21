@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import LockIcon from '@mui/icons-material/Lock';
 import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import ErrorRegister from './ErrorModals/ErrorRegister'
 
 export default function RegisterScreen(){
     const {auth} = useContext(AuthContext);
@@ -39,6 +40,9 @@ export default function RegisterScreen(){
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
+                    <ErrorRegister/>   
+                </Box>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>

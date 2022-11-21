@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import LockIcon from '@mui/icons-material/Lock';
 import CssBaseline from '@mui/material/CssBaseline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import ErrorLogin from './ErrorModals/ErrorLogin'
 
 export default function LoginScreen(){
     const { auth } = useContext(AuthContext);
@@ -30,13 +31,16 @@ export default function LoginScreen(){
         loginScreen = 
         <Container component="main" maxWidth="xs" style={{border: '5px solid black', borderRadius: '10px'}}>
             <CssBaseline />
-            <Box sx={{marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
+            <Box sx={{marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent:'space-between'}}>
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Log in
                 </Typography>
+                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
+                    <ErrorLogin/>   
+                </Box>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
