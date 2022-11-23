@@ -153,6 +153,27 @@ getPlaylistPairs = async (req, res) => {
         asyncFindList(user.email);
     }).catch(err => console.log(err))
 }
+getPublicPlaylistPairs = async (req,res) => {
+    console.log("getPublicPlaylistPairs");
+    await Playlist.find({isPublished: true}, (err,playlists)=>{
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }else {
+            console.log("Send the Public Playlist pairs");
+            let pairs = [];
+            for (let key in playlists) {
+                let list = playlists[key];
+                let pair = {
+                    _id: list._id,
+                    name: list.name
+                };
+                pairs.push(pair);
+            }
+            return res.status(200).json({ success: true, idNamePairs: pairs })
+        }
+    })
+}
+
 getPlaylists = async (req, res) => {
     user = await getUser(req.userId);
     email = user.email;
@@ -245,6 +266,7 @@ module.exports = {
     deletePlaylist,
     getPlaylistById,
     getPlaylistPairs,
+    getPublicPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
 }

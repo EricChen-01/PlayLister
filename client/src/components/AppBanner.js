@@ -58,7 +58,7 @@ export default function AppBanner(){
     }
 
     return(
-        <AppBar position="static" style={{backgroundColor:"#f9f6f0"}}>
+        <AppBar position="static" style={{backgroundColor:"#f9f6f0"}} elevation='14'>
             <Container maxWidth={false}>
                 <Toolbar disableGutters>
                     <Grid container justifyContent='space-between' alignItems="center">
