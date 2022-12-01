@@ -53,7 +53,7 @@ export default function AppBanner(){
     }else{
         menuItems=
         <Box>
-            <MenuItem onClick={handleMenuClose}><Typography onClick={handleLogOut}>Log Out</Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Link href="/" color="inherit" underline="none" onClick={handleLogOut}>Log Out</Link></MenuItem>
         </Box>
     }
 

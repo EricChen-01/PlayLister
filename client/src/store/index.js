@@ -12,6 +12,8 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST : "SET_CURRENT_LIST",
     SET_SELECTION_TYPE : "SET_SELECTION_TYPE",
+    HIDE_MODALS : "HIDE_MODALS",
+    ADD_LIST_ERROR : "ADD_LIST_ERROR",
 }
 
 const tps = new jsTPS();
@@ -22,6 +24,7 @@ const CurrentModal = {
     REMOVE_SONG : "REMOVE_SONG",
     EDIT_SONG : "EDIT_SONG",
     DUPLICATE_LIST : "DUPLICATE_LIST",
+    ADD_LIST_ERROR : "ADD_LIST_ERROR",
 }
 
 const SearchSelection = {
@@ -122,7 +125,40 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDuplication: null,
                 })); 
             }
-
+            // HIDES ALL MODALS IN DISPLAY
+            case GlobalStoreActionType.HIDE_MODALS: {
+                return setStore((prevState)=>({
+                    currentModal : CurrentModal.NONE,
+                    currentSelection: prevState.currentSelection,
+                    idNamePairs: prevState.idNamePairs,
+                    currentList: prevState.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: prevState.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    listIdMarkedForDuplication: null,
+                    listMarkedForDuplication: null,
+                }));
+            }
+            // SHOWS ADDING A LIST ERROR
+            case GlobalStoreActionType.ADD_LIST_ERROR: {
+                return setStore((prevState)=>({
+                    currentModal : CurrentModal.ADD_LIST_ERROR,
+                    currentSelection: prevState.currentSelection,
+                    idNamePairs: prevState.idNamePairs,
+                    currentList: prevState.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: prevState.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    listIdMarkedForDuplication: null,
+                    listMarkedForDuplication: null,
+                }));
+            }
             default:
                 return store;
         }
@@ -131,6 +167,11 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
+        let currentNumber = 1;
+        while(store.idNamePairs.some(a => a.name === newListName)){
+            newListName = "Untitled" + store.newListCounter + " (" + currentNumber + ")";
+            currentNumber++;
+        }
         const response = await api.createPlaylist(newListName, [], auth.user.email, false, 0,0,[]);//newListName, newSongs, userEmail, published, likes, dislikes, comments
         console.log("createNewList response: " + response);
         if (response.status === 201) {
@@ -222,7 +263,18 @@ function GlobalStoreContextProvider(props) {
         }
         asyncSetCurrentList(id);
     }
-    
+    store.addListError = function(){
+        storeReducer({
+            type: GlobalStoreActionType.ADD_LIST_ERROR,
+            payload: {}
+        });  
+    }
+    store.hideModals = function() {
+        storeReducer({
+            type: GlobalStoreActionType.HIDE_MODALS,
+            payload: {}
+        });    
+    }
 
     return (
         <GlobalStoreContext.Provider value={{

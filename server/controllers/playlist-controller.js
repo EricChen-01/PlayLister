@@ -102,15 +102,13 @@ getPlaylistById = async (req, res) => {
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     return res.status(200).json({ success: true, playlist: list })
-                }
-                else {
+                }else {
                     console.log("incorrect user!");
                     return res.status(400).json({ success: false, description: "authentication error" });
                 }
             });
         }
-
-        if(req.userId == "GUEST" && list.isPublished){
+        if(list.isPublished){
             return res.status(200).json({ success: true, playlist: list })
         }else{
             asyncFindUser(list);

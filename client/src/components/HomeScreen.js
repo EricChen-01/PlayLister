@@ -4,6 +4,7 @@ import GlobalStoreContext from '../store'
 import AuthContext from '../auth'
 import { ThemeProvider, createTheme} from '@mui/material/styles'
 
+import ErrorAddList from './ErrorModals/ErrorAddList'
 import AppNav from './AppNav';
 import ListCard from './ListCard';
 
@@ -80,6 +81,9 @@ export default function HomeScreen() {
         </Grid>
     }else{
         // logic to display playlist name if clicked
+        if(store.currentList){
+            display = store.currentList.name;
+        }
     }
 
     return(
@@ -105,6 +109,7 @@ export default function HomeScreen() {
                 <Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
                         {display}
                 </Grid>
+                <ErrorAddList/>
             </Box>
         </ThemeProvider>
     )
