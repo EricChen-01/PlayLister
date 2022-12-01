@@ -195,6 +195,35 @@ function GlobalStoreContextProvider(props) {
         });
     }
 
+    store.changeSelectionToAllLists = function() {
+        storeReducer({
+            type: GlobalStoreActionType.SET_SELECTION_TYPE,
+            payload: SearchSelection.ALL_LISTS
+        });
+    }
+
+    store.changeSelectionToUsers = function() {
+        storeReducer({
+            type: GlobalStoreActionType.SET_SELECTION_TYPE,
+            payload: SearchSelection.USERS
+        });
+    }
+
+    store.setCurrentList = function(id) {
+        async function asyncSetCurrentList(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: playlist
+                });
+            }
+        }
+        asyncSetCurrentList(id);
+    }
+    
+
     return (
         <GlobalStoreContext.Provider value={{
             store

@@ -20,7 +20,7 @@ export default function AppNav(props) {
 
     const handleSearch = (event) =>{
         if(event.key === 'Enter'){
-            console.log('value', event.target.value);
+            console.log('You search is: ' + event.target.value + 'Selection is: ' + store.currentSelection);
          }
     }
     const handleHome = () => {
@@ -29,11 +29,13 @@ export default function AppNav(props) {
     }
 
     const handleAllLists = () => {
-        
+        store.changeSelectionToAllLists();
+        changed();
     }
 
     const handleUsers = () => {
-        //TODO
+        store.changeSelectionToUsers();
+        changed();
     }
     
     const handleSortByName = () => {}
@@ -64,7 +66,7 @@ export default function AppNav(props) {
                                     </IconButton>    
                                 </Grid>
                                 <Grid item>
-                                    <IconButton>
+                                    <IconButton onClick={handleAllLists}>
                                         <Groups/>
                                     </IconButton> 
                                 </Grid>

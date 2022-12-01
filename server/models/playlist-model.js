@@ -13,6 +13,7 @@ const playlistSchema = new Schema(
         isPublished: { type: Boolean, required: true},
         likes: { type: Number, required: true }, 
         dislikes: { type: Number, required: true},
+
         songs: { type: [{
             title: String,
             artist: String,
@@ -20,10 +21,9 @@ const playlistSchema = new Schema(
         }], required: true },
 
         comments: { type: [{
-            name: { type: String, required: true },
-            ownerEmail: { type: String, required: true },
-            userId: { type: String, required: true}
-        }],required: true},
+            userId: { type: String, required: true},
+            message: { type: String, required: true}
+        }],required: true}
     },
     { timestamps: true },
 )

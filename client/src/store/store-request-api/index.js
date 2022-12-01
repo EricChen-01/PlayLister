@@ -38,7 +38,7 @@ export const deletePlaylistById = (id) => api.delete(`/playlist/${id}`)
 export const getPlaylistById = (id) => api.get(`/playlist/${id}`)
 export const getPlaylistPairs = () => api.get(`/playlistpairs/`)
 export const getPublicPlaylistPairs = () => api.get('/publicplaylistpairs/')
-export const updatePlaylistById = (id, playlist) => {
+export const updatePlaylistById = (id, playlist,guest) => {
     return api.put(`/playlist/${id}`, {
         // SPECIFY THE PAYLOAD
         playlist : playlist

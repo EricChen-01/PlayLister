@@ -1,12 +1,6 @@
 const Playlist = require('../models/playlist-model')
 const User = require('../models/user-model');
-/*
-    This is our back-end API. It provides all the data services
-    our database needs. Note that this file contains the controller
-    functions for each endpoint.
-    
-    @author McKilla Gorilla
-*/
+
 createPlaylist = (req, res) => {
     const body = req.body;
     console.log("createPlaylist body: " + JSON.stringify(body));
@@ -92,12 +86,13 @@ deletePlaylist = async (req, res) => {
 }
 getPlaylistById = async (req, res) => {
     console.log("Find Playlist with id: " + JSON.stringify(req.params.id));
-
+    
     await Playlist.findById({ _id: req.params.id }, (err, list) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
         console.log("Found list: " + JSON.stringify(list));
+
 
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
@@ -114,7 +109,12 @@ getPlaylistById = async (req, res) => {
                 }
             });
         }
-        asyncFindUser(list);
+
+        if(req.userId == "GUEST" && list.isPublished){
+            return res.status(200).json({ success: true, playlist: list })
+        }else{
+            asyncFindUser(list);
+        }
     }).catch(err => console.log(err))
 }
 getPlaylistPairs = async (req, res) => {
@@ -142,7 +142,11 @@ getPlaylistPairs = async (req, res) => {
                         let list = playlists[key];
                         let pair = {
                             _id: list._id,
-                            name: list.name
+                            name: list.name,
+                            public: list.isPublished,
+                            likes: list.likes,
+                            dislikes: list.dislikes,
+                            ownerName: user.firstName + " " + user.lastName,
                         };
                         pairs.push(pair);
                     }
@@ -159,21 +163,28 @@ getPublicPlaylistPairs = async (req,res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }else {
-            console.log("Send the Public Playlist pairs");
-            let pairs = [];
-            for (let key in playlists) {
-                let list = playlists[key];
-                let pair = {
-                    _id: list._id,
-                    name: list.name
-                };
-                pairs.push(pair);
+            async function asyncReturnPairs() {
+                console.log("Send the Public Playlist pairs");
+                let pairs = [];
+                for (let key in playlists) {
+                    let list = playlists[key];
+                    let user = await User.findOne({email: list.ownerEmail});
+                    let pair = {
+                        _id: list._id,
+                        name: list.name,
+                        public: list.isPublished,
+                        likes: list.likes,
+                        dislikes: list.dislikes,
+                        ownerName: user.firstName + " " + user.lastName,
+                    };
+                    pairs.push(pair);
+                }
+                return res.status(200).json({ success: true, idNamePairs: pairs })   
             }
-            return res.status(200).json({ success: true, idNamePairs: pairs })
+            asyncReturnPairs();
         }
     })
 }
-
 getPlaylists = async (req, res) => {
     user = await getUser(req.userId);
     email = user.email;
@@ -189,6 +200,7 @@ getPlaylists = async (req, res) => {
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
 }
+
 updatePlaylist = async (req, res) => {
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
@@ -200,7 +212,13 @@ updatePlaylist = async (req, res) => {
             error: 'You must provide a body to update',
         })
     }
-
+    if (req.userId == "GUEST"){
+        return res.status(401).json({
+            success: false,
+            message: 'unauthorized',
+        })
+    }
+    
     Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
         console.log("playlist found: " + JSON.stringify(playlist));
         if (err) {
@@ -210,6 +228,8 @@ updatePlaylist = async (req, res) => {
             })
         }
 
+
+        
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
@@ -220,7 +240,11 @@ updatePlaylist = async (req, res) => {
                     console.log("req.body.name: " + req.body.name);
 
                     list.name = body.playlist.name;
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
                     list.songs = body.playlist.songs;
+                    list.comments = body.playlist.comments;
+
                     list
                         .save()
                         .then(() => {
@@ -238,17 +262,43 @@ updatePlaylist = async (req, res) => {
                                 message: 'Playlist not updated!',
                             })
                         })
+                }else {
+
+                    if(!list.isPublished){
+                        console.log('playlist is not published. cannot update as regular user')
+                        return res.status(401).json({
+                            success: false,
+                            message: 'unauthorized',
+                        })
+                    }
+                    console.log("regular user! Updating only comments, likes, and dislikes");
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
+                    list.comments = body.playlist.comments;
+                    list
+                        .save()
+                        .then(() => {
+                            console.log("SUCCESS!!!");
+                            return res.status(200).json({
+                                success: true,
+                                id: list._id,
+                                message: 'This is not your playlist. So only comments, likes, and dislikes were updated',
+                            })
+                        })
+                        .catch(error => {
+                            console.log("FAILURE: " + JSON.stringify(error));
+                            return res.status(404).json({
+                                error,
+                                message: 'Playlist not updated!',
+                            })
+                        })
                 }
-                else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }
+                
             });
         }
         asyncFindUser(playlist);
     })
 }
-
 getUser = async (id) =>{
     user = User.findById(id,(err,user) => {
         if(err){

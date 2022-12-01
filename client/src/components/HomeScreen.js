@@ -48,6 +48,7 @@ export default function HomeScreen() {
     }
 
     let lists = "";
+    let display='';
     if(store){
         lists = 
             <List sx={{overflow:'auto', width: '90%', left: '5%', height: '100%'}}>
@@ -56,12 +57,31 @@ export default function HomeScreen() {
                     <ListCard
                         key={pair._id}
                         idNamePair={pair}
-                        selected={false}
                     />
                 ))
             }
             </List>;
     }
+    if(store.currentSelection == "HOME" ){
+        display = 
+        <Grid item>
+            <Button pill variant='text' color='neutral' disableElevation onClick={handleAddList}>
+                <Grid container fontSize='58px' spacing={0} direction="row" alignItems="center" justifyContent="center">
+                    <Grid item>
+                        <Box display="flex" justifyContent="center">
+                            <Add fontSize='inherit'/>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Typography fontSize='inherit'>Add List</Typography>
+                    </Grid>
+                </Grid>
+            </Button>
+        </Grid>
+    }else{
+        // logic to display playlist name if clicked
+    }
+
     return(
         <ThemeProvider theme={theme}>
             <Box backgroundColor='#808080' height='100%'>
@@ -83,20 +103,7 @@ export default function HomeScreen() {
                     </Grid>
                 </Box>
                 <Grid container spacing={0} direction="row" alignItems="center" justifyContent="center">
-                        <Grid item>
-                            <Button pill variant='text' color='neutral' disableElevation onClick={handleAddList}>
-                                <Grid container fontSize='58px' spacing={0} direction="row" alignItems="center" justifyContent="center">
-                                    <Grid item>
-                                        <Box display="flex" justifyContent="center">
-                                            <Add fontSize='inherit'/>
-                                        </Box>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography fontSize='inherit'>Add List</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                        {display}
                 </Grid>
             </Box>
         </ThemeProvider>
