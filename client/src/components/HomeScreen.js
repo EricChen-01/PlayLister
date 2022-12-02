@@ -32,7 +32,7 @@ export default function HomeScreen() {
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
     const changed = useRef(false);
-
+    //const [expanded, setExpanded] = useState(false);
 
     useEffect(() =>{
         console.log('I am a guest? ' + auth.guest);
@@ -42,6 +42,10 @@ export default function HomeScreen() {
     const handleAddList = () => {
         store.createNewList();
         toggleChanged();
+    }
+
+    const handleExpand = (id) => {
+        store.expandList(id);
     }
 
     const toggleChanged = () => {
@@ -58,14 +62,22 @@ export default function HomeScreen() {
                     <ListCard
                         key={pair._id}
                         idNamePair={pair}
+                        changed={toggleChanged}
+                        expanded={store.expanded}
+                        changeexpanded={handleExpand}
                     />
                 ))
             }
             </List>;
     }
+    let temp = '';
+    if(store.currentList){
+        temp = store.currentList.name;
+    } 
     if(store.currentSelection == "HOME" ){
         display = 
         <Grid item>
+            {temp}
             <Button pill variant='text' color='neutral' disableElevation onClick={handleAddList}>
                 <Grid container fontSize='58px' spacing={0} direction="row" alignItems="center" justifyContent="center">
                     <Grid item>
@@ -96,7 +108,7 @@ export default function HomeScreen() {
                     <Grid container sx={{height:'100%',border:'1px solid blue'}}>
                         <Grid item xs={7} sx={{overflow:'auto',height:'100%',border:'1px solid blue'}}>
                             <Box border='1px solid red'>
-                                <List >
+                                <List>
                                     {lists}
                                 </List>
                             </Box>

@@ -14,6 +14,7 @@ export const GlobalStoreActionType = {
     SET_SELECTION_TYPE : "SET_SELECTION_TYPE",
     HIDE_MODALS : "HIDE_MODALS",
     ADD_LIST_ERROR : "ADD_LIST_ERROR",
+    EXPAND_LIST : "EXPAND_LIST",
 }
 
 const tps = new jsTPS();
@@ -48,6 +49,7 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         listIdMarkedForDuplication: null,
         listMarkedForDuplication: null,
+        expanded: false
     });
     const history = useHistory();
 
@@ -72,6 +74,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     listIdMarkedForDuplication: null,
                     listMarkedForDuplication: null,
+                    expanded: payload._id
                 }));
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -89,6 +92,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     listIdMarkedForDuplication: null,
                     listMarkedForDuplication: null,
+                    expanded: prevState.expanded
                 }));
             }
             // SINGLE CLICKS ON LIST
@@ -106,6 +110,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     listIdMarkedForDuplication: null,
                     listMarkedForDuplication: null,
+                    expanded: (prevState.expanded === payload._id) ? prevState.expanded : false
                 }));
             }
 
@@ -123,6 +128,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     listIdMarkedForDuplication: null,
                     listMarkedForDuplication: null,
+                    expanded: false,
                 })); 
             }
             // HIDES ALL MODALS IN DISPLAY
@@ -140,6 +146,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     listIdMarkedForDuplication: null,
                     listMarkedForDuplication: null,
+                    expanded: false,
                 }));
             }
             // SHOWS ADDING A LIST ERROR
@@ -157,6 +164,24 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     listIdMarkedForDuplication: null,
                     listMarkedForDuplication: null,
+                    expanded: false,
+                }));
+            }
+            case GlobalStoreActionType.EXPAND_LIST:{
+                return setStore((prevState)=>({
+                    currentModal : CurrentModal.NONE,
+                    currentSelection: prevState.currentSelection,
+                    idNamePairs: prevState.idNamePairs,
+                    currentList: prevState.currentList,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: prevState.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    listIdMarkedForDuplication: null,
+                    listMarkedForDuplication: null,
+                    expanded: payload,
                 }));
             }
             default:
@@ -172,7 +197,7 @@ function GlobalStoreContextProvider(props) {
             newListName = "Untitled" + store.newListCounter + " (" + currentNumber + ")";
             currentNumber++;
         }
-        const response = await api.createPlaylist(newListName, [], auth.user.email, false, 0,0,[]);//newListName, newSongs, userEmail, published, likes, dislikes, comments
+        const response = await api.createPlaylist(newListName, [], auth.user.email, false, 0,0,[],null);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -188,7 +213,17 @@ function GlobalStoreContextProvider(props) {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
     }
-    
+    store.publishList = async function () {
+        const current = new Date();
+        const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+        if(store.currentList){
+            let list = store.currentList;
+            list.isPublished = true;
+            list.datePublished = date;
+            //update the list
+            store.updateCurrentList();
+        }
+    }
     // LOADS PLAYLISTS 
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
@@ -275,7 +310,27 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });    
     }
-
+    store.expandList = function(id){
+        let payload = (store.expanded === id ? false : id)
+        
+        storeReducer({
+            type: GlobalStoreActionType.EXPAND_LIST,
+            payload: payload
+        });  
+    }
+    store.updateCurrentList = function() {
+        async function asyncUpdateCurrentList() {
+            const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
+            if (response.data.success) {
+                console.log('success update current playlist')
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: store.currentList
+                });
+            }
+        }
+        asyncUpdateCurrentList();
+    }
     return (
         <GlobalStoreContext.Provider value={{
             store
