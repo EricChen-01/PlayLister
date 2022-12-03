@@ -3,11 +3,11 @@ import Button from './PillButton';
 import EditToolbar from './EditToolbar';
 
 export default function Workspace(props){
-    const {changed} = props
+    const {changed, idNamePair} = props
     return(
         <Box>
             Songs + Edit toolbox here
-            <EditToolbar changed={changed}/>
+            <EditToolbar changed={changed} idNamePair={idNamePair}/>
         </Box>
     )
 }

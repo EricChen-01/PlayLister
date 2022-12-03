@@ -1,5 +1,6 @@
 import {useContext} from 'react';
-import AuthContext from '../auth'
+import AuthContext from '../auth';
+import GlobalStoreContext from '../store';
 import {Container ,Grid, Typography, Box, TextField, FormControlLabel,Checkbox,Link} from '@mui/material'
 import Button from './PillButton'
 import Avatar from '@mui/material/Avatar';
@@ -10,19 +11,17 @@ import ErrorLogin from './ErrorModals/ErrorLogin'
 
 export default function LoginScreen(){
     const { auth } = useContext(AuthContext);
+    const {store} = useContext(GlobalStoreContext);
     console.log("LoginScreen auth.loggedIn: " + auth.loggedIn);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-          email: data.get('email'),
-          password: data.get('password'),
-        });
-        auth.loginUser(
+        let successPromise = auth.loginUser(
             data.get('email'),
             data.get('password')
         );
+        //successPromise.then(res => {(res) ? store.changeSelectionToHome() : console.log('unable to login')})
     };
     
 

@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
-import AuthContext from '../auth'
-import Workspace from './Workspace'
+import AuthContext from '../auth';
+import Workspace from './Workspace';
 
-import {Card,ListItem,Typography, Box, Grid,Collapse, IconButton} from '@mui/material';
+import {Card,ListItem,Typography, Box, Grid,Collapse, IconButton, Container} from '@mui/material';
 import {ThumbUpOffAlt,ThumbDownOffAlt, ThumbDown,ThumbUp, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown} from '@mui/icons-material';
 
 
@@ -18,6 +18,14 @@ export default function ListCard(props) {
     let likes = idNamePair.likes;
     let dislikes = idNamePair.dislikes;
     let datePublished = idNamePair.datePublished;
+    let dateObject = new Date(datePublished);
+    let date = (dateObject) ?`${dateObject.toLocaleString('en-US', {month: 'short'})} ${dateObject.getMonth()+1}, ${dateObject.getFullYear()}` : '';
+    
+    const colors = {
+        GOLD: 'rgb(212,212,145)',
+        BLUEGRAY: 'rgb(212,212,245)',
+        CREAM: '#FFFFEA'
+    }
 
     const handleChange = (id) => (event) => {
         event.stopPropagation();
@@ -39,9 +47,11 @@ export default function ListCard(props) {
     }
 
     let collapse = 
-        <Collapse in={expanded === idNamePair._id} timeout="auto" unmountOnExit>
-            <Workspace changed={changed}/>
-        </Collapse>
+        <Box>
+            <Collapse in={expanded === idNamePair._id} timeout="auto" unmountOnExit>
+                <Workspace changed={changed} idNamePair={idNamePair}/>
+            </Collapse>
+        </Box>
 
     let publishedCard = 
         <ListItem disableGutters 
@@ -50,14 +60,14 @@ export default function ListCard(props) {
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
             }}>
-            <Card sx={{width:345, minHeight:100}}>
-                <Grid container>
+            <Card sx={{width:545, minHeight:100,backgroundColor: colors.BLUEGRAY, '&:hover':{border:'1px solid black'} }}>
+                <Grid container direction='column'>
                     <Grid item width='100%'>
                         <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-                            <Grid item >
+                            <Grid item>
                                 <Typography>{listName}</Typography>
                                 <Typography>By: {ownerName}</Typography>
-                                <Typography>published: {datePublished}</Typography>
+                                <Typography>published: {date}</Typography>
                             </Grid>
                             <Grid item direction='row'>
                                 <Grid container>
@@ -69,7 +79,7 @@ export default function ListCard(props) {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item>
+                    <Grid item width='100%'>
                         {collapse}
                     </Grid>
                     <Grid item width='100%'>
@@ -90,8 +100,8 @@ export default function ListCard(props) {
         onClick={(event) => {
             handleLoadList(event, idNamePair._id)
         }}>
-           <Card sx={{ width: 345, minHeight:100}}>
-                <Grid container>
+           <Card sx={{ width: 545, minHeight:100,backgroundColor: colors.CREAM}}>
+                <Grid container direction='column'>
                     <Grid item>
                         <Typography>{listName}</Typography>
                         <Typography>By: {ownerName}</Typography>
@@ -121,75 +131,3 @@ export default function ListCard(props) {
         card
     )
 }
-
-/*
-sx={{position:'relative',width:'100%',minHeight:134, '&:hover':{border:'2px solid black'}}}
-*/
-
-/*
-unpublished
- <Card elevation={1} sx={{position:'relative',width:'100%',minHeight:134, '&:hover':{border:'2px solid black'}}}>
-                <Grid container position='absolute' direction='column' height='100%'>
-                    <Grid item border={1}>
-                        <Grid container>
-                            <Grid item>
-                                <Typography>{listName}</Typography>
-                                <Typography>By: {ownerName}</Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        {collapse}
-                    </Grid>
-                    <Grid item border={1}>
-                        <Grid container height='100%' justifyContent='flex-end' alignItems='flex-end'>
-                            <Grid item>
-                                <IconButton onClick={handleChange(idNamePair._id)}>
-                                    {expanded === idNamePair._id ? <KeyboardDoubleArrowUp/> : <KeyboardDoubleArrowDown/>}
-                                </IconButton>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Card>
-            */
-
-
-
-            
-/*
-published
-<Card elevation={1} sx={{width:'100%',minHeight:134, '&:hover':{border:'2px solid black'}}}>
-                <Grid container justifyContent="space-between">
-                    <Grid item border={2}>
-                        <Typography>{listName}</Typography>
-                        <Typography>By: {ownerName}</Typography>
-                        <Typography>published: {}</Typography>
-                    </Grid>
-                    <Grid item border={2}>
-                        <Grid container>
-                            <Grid item>
-                                <Grid container>
-                                    <Grid item>
-                                        <ThumbUpOffAlt/>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>{likes}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item>
-                                <Grid container>
-                                    <Grid item>
-                                        <ThumbDownOffAlt/>
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>{dislikes}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Card>
-            */

@@ -66,17 +66,6 @@ function AuthContextProvider(props) {
                     errorMessage: null
                 }))
             }
-            /*
-            case AuthActionType.REGISTER_USER: {
-                return setAuth((prevState)=>({
-                    user: payload.user,
-                    loggedIn: true,
-                    currentModal: CurrentModal.NONE,
-                    guest: false, 
-                    errorMessage: null
-                }))
-            }
-            */
             case AuthActionType.SET_LOGGED_IN:{
                 return setAuth((prevState)=>({
                     user: payload.user,
@@ -172,6 +161,7 @@ function AuthContextProvider(props) {
                 }
             })
             history.push("/");
+            return true
         }else{
             //response.data.errorMessage
             
@@ -181,6 +171,7 @@ function AuthContextProvider(props) {
                     message: JSON.parse(response.request.response).errorMessage
                 }
             })
+            return false
         }
     }
 

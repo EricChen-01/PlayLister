@@ -45,7 +45,6 @@ export default function SplashScreen() {
     const handleContinueAsGuest = (event) => {
         auth.useAsGuest();
         history.push('/');
-
     };
 
     const handleLogin = (event) => {

@@ -61,17 +61,17 @@ export default function AppNav(props) {
                         <Grid item>
                             <Grid container columnSpacing={2}>
                                 <Grid item>
-                                    <IconButton disabled={auth.guest} onClick={handleHome}>
+                                    <IconButton color={(store.currentSelection === 'HOME')? 'info' : 'default'} disabled={auth.guest} onClick={handleHome}>
                                         <Home/>
                                     </IconButton>    
                                 </Grid>
                                 <Grid item>
-                                    <IconButton onClick={handleAllLists}>
+                                    <IconButton color={(store.currentSelection === 'ALL_LISTS')? 'info' : 'default'} onClick={handleAllLists}>
                                         <Groups/>
                                     </IconButton> 
                                 </Grid>
                                 <Grid item>
-                                    <IconButton> 
+                                    <IconButton color={(store.currentSelection === 'USERS')? 'info' : 'default'} onClick={handleUsers}> 
                                         <Person/>
                                     </IconButton> 
                                 </Grid>

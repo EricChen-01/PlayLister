@@ -119,6 +119,9 @@ getPlaylistPairs = async (req, res) => {
     console.log("getPlaylistPairs");
     await User.findOne({ _id: req.userId }, (err, user) => {
         console.log("find user with id " + req.userId);
+        if(!user) {
+            return res.status(400).json({ success: false, error: 'user does not exist'})
+        }
         async function asyncFindList(email) {
             console.log("find all Playlists owned by " + email);
             await Playlist.find({ ownerEmail: email }, (err, playlists) => {
@@ -145,7 +148,8 @@ getPlaylistPairs = async (req, res) => {
                             likes: list.likes,
                             dislikes: list.dislikes,
                             ownerName: user.firstName + " " + user.lastName,
-                            datePublished: list.datePublished
+                            datePublished: list.datePublished,
+                            email: list.ownerEmail,
                         };
                         pairs.push(pair);
                     }
@@ -175,7 +179,8 @@ getPublicPlaylistPairs = async (req,res) => {
                         likes: list.likes,
                         dislikes: list.dislikes,
                         ownerName: user.firstName + " " + user.lastName,
-                        datePublished: list.datePublished
+                        datePublished: list.datePublished,
+                        email: list.ownerEmail,
                     };
                     pairs.push(pair);
                 }

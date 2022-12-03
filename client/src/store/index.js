@@ -215,11 +215,10 @@ function GlobalStoreContextProvider(props) {
     }
     store.publishList = async function () {
         const current = new Date();
-        const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
         if(store.currentList){
             let list = store.currentList;
             list.isPublished = true;
-            list.datePublished = date;
+            list.datePublished = current;
             //update the list
             store.updateCurrentList();
         }
@@ -252,6 +251,7 @@ function GlobalStoreContextProvider(props) {
                 console.log("API FAILED TO GET THE LIST PAIRS");
             }
         }
+
         if (store.currentSelection == SearchSelection.HOME){
             console.log('selection is HOME');
             asyncLoadIdNamePairs();

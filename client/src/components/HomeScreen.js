@@ -1,4 +1,3 @@
-import { useHistory} from 'react-router-dom'
 import {useContext,useState,useEffect,useRef} from 'react'
 import GlobalStoreContext from '../store'
 import AuthContext from '../auth'
@@ -7,6 +6,7 @@ import { ThemeProvider, createTheme} from '@mui/material/styles'
 import ErrorAddList from './ErrorModals/ErrorAddList'
 import AppNav from './AppNav';
 import ListCard from './ListCard';
+import PlayerCommentScreen from './PlayerCommentScreen';
 
 import {Box, Grid, Typography, List, ListItem, Card} from '@mui/material';
 import Button from './PillButton';
@@ -34,8 +34,15 @@ export default function HomeScreen() {
     const changed = useRef(false);
     //const [expanded, setExpanded] = useState(false);
 
+    useEffect(()=>{
+        console.log('asdsad')
+        if(auth.loggedIn){
+            store.changeSelectionToHome();
+            toggleChanged();
+        }
+    },[])
+
     useEffect(() =>{
-        console.log('I am a guest? ' + auth.guest);
         store.loadIdNamePairs();
     },[changed.current])
 
@@ -114,7 +121,7 @@ export default function HomeScreen() {
                             </Box>
                         </Grid>
                         <Grid item xs={5}>
-                            <Typography>Player/Comments Screen</Typography>
+                            <PlayerCommentScreen/>
                         </Grid>
                     </Grid>
                 </Box>
