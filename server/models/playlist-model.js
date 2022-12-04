@@ -22,6 +22,8 @@ const playlistSchema = new Schema(
 
         comments: { type: [{
             userId: { type: String, required: true},
+            firstName: {type: String, required: true},
+            lastName: {type: String, required: true},
             message: { type: String, required: true}
         }],required: true},
         datePublished: {type: Date},

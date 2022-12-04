@@ -10,7 +10,6 @@ import ErrorRegister from './ErrorModals/ErrorRegister'
 
 export default function RegisterScreen(){
     const {auth} = useContext(AuthContext);
-    console.log("RegisterScreen auth.loggedIn: " + auth.loggedIn);
 
     const handleSubmit = (event) => {
         event.preventDefault();

@@ -42,18 +42,30 @@ export default function AppNav(props) {
         store.sortByName();
         changed();
     }
-    const handleSortByPublishDate = () => {}
-    const handleSortByListens = () => {}
-    const handleSortByLikes = () => {}
-    const handleSortByDislikes = () => {}
+    const handleSortByPublishDate = () => {
+        store.sortByPublishDate();
+        changed();
+    }
+    const handleSortByListens = () => {
+        store.sortByListens();
+        changed();
+    }
+    const handleSortByLikes = () => {
+        store.sortByLikes();
+        changed();
+    }
+    const handleSortByDislikes = () => {
+        store.sortByDislikes();
+        changed();
+    }
 
 
     const menu =     
         <Box>
             <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={handleSortByName}>Name (A-Z) </Typography></MenuItem>
-            <MenuItem onClick={handleMenuClose}><DateRange/><Typography onClick={null}>Publish Date (Newest)</Typography></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Replay/><Typography onClick={null}>Listens (High - Low)</Typography></MenuItem>
-            <MenuItem onClick={handleMenuClose}><RecommendOutlined/><Typography onClick={null}>Likes (High - Low)</Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><DateRange/><Typography onClick={handleSortByPublishDate}>Publish Date (Newest)</Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><Replay/><Typography onClick={handleSortByListens}>Listens (High - Low)</Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><RecommendOutlined/><Typography onClick={handleSortByLikes}>Likes (High - Low)</Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><RecommendOutlined style={{transform: 'scaleY(-1)'}}/><Typography onClick={null}>Dislikes (High - Low)</Typography></MenuItem>
         </Box>
     return(

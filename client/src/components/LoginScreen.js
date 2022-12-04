@@ -12,16 +12,15 @@ import ErrorLogin from './ErrorModals/ErrorLogin'
 export default function LoginScreen(){
     const { auth } = useContext(AuthContext);
     const {store} = useContext(GlobalStoreContext);
-    console.log("LoginScreen auth.loggedIn: " + auth.loggedIn);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        let successPromise = auth.loginUser(
+        auth.loginUser(
             data.get('email'),
             data.get('password')
         );
-        //successPromise.then(res => {(res) ? store.changeSelectionToHome() : console.log('unable to login')})
+        
     };
     
 

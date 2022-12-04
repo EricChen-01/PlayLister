@@ -35,7 +35,6 @@ export default function HomeScreen() {
     const changed = useRef(false);
 
     useEffect(()=>{
-        console.log('asdsad')
         if(auth.loggedIn){
             store.changeSelectionToHome();
             toggleChanged();
@@ -113,9 +112,9 @@ export default function HomeScreen() {
                     <AppNav changed={toggleChanged}/>
                 </Box>
                 <Box height='80%'>
-                    <Grid container sx={{height:'100%',border:'1px solid blue'}}>
-                        <Grid item xs={7} sx={{overflow:'auto',height:'100%',border:'1px solid blue'}}>
-                            <Box border='1px solid red'>
+                    <Grid container sx={{height:'100%'}}>
+                        <Grid item xs={6} sx={{overflow:'auto',height:'100%'}}>
+                            <Box>
                                 <List>
                                     {lists}
                                 </List>

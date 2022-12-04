@@ -54,10 +54,8 @@ export default function YouTubePlayerExample() {
     function nextSong() {
         let temp = currentSongPlaying;
         if (temp + 1 >= playlist.length) {
-            console.log('yeo1')
             setCurrentSongPlaying((temp + 1) % playlist.length);
         }else{
-            console.log('yeo2')
             setCurrentSongPlaying(temp + 1);
 
         }
@@ -94,8 +92,6 @@ export default function YouTubePlayerExample() {
     function onPlayerStateChange(event) {
         let status = event.data;
         let player = event.target;
-
-        console.log('state changed');
 
         if (status === -1) {
             // - 1: VIDEO UNSTARTED

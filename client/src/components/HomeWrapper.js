@@ -7,8 +7,6 @@ import GlobalStoreContext from '../store'
 export default function HomeWrapper() {
     const { auth } = useContext(AuthContext);
     const {store} = useContext(GlobalStoreContext);
-    console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
-    console.log("HomeWrapper auth.guest: " + auth.guest);
     
     if (auth.loggedIn || auth.guest){
         return <HomeScreen />

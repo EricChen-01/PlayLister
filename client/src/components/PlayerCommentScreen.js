@@ -2,6 +2,7 @@ import GlobalStoreContext from '../store';
 import AuthContext from '../auth'
 import { useState,useContext, useEffect} from 'react'
 
+import CommentScreen from './CommentScreen'
 import Player from './Player'
 
 import {Box,Typography,Tab,Tabs,Grid,Card,Paper} from '@mui/material'
@@ -33,15 +34,21 @@ export default function PlayerCommentScreen(){
             <Paper>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Player"/>
-                    <Tab label="Comment" disabled={auth.guest}/>
+                    <Tab label="Comment" disabled={!store.currentList}/>
                 </Tabs>
             </Paper>
-            <TabPanel value={value} index={0}>
-                <Player/>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-
-            </TabPanel>
+            <Box height='80%'>
+              <Box>
+                <TabPanel value={value} index={0}>
+                  <Player/>
+                </TabPanel>
+              </Box>
+              <Box height='100%'>
+                <TabPanel value={value} index={1}>
+                  <CommentScreen/>
+                </TabPanel>
+              </Box>
+            </Box>
         </Box>
     )
 }

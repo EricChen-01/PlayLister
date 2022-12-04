@@ -168,9 +168,25 @@ registerUser = async (req, res) => {
     }
 }
 
+findUser = async (req,res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+        return res.status(200).json({
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+            }
+        })
+    } catch (err) {
+        console.log("err: " + err);
+        res.json(false);
+    }
+}
+
 module.exports = {
     getLoggedIn,
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    findUser
 }

@@ -19,7 +19,7 @@ export default function ListCard(props) {
     let dislikes = idNamePair.dislikes;
     let datePublished = idNamePair.datePublished;
     let dateObject = new Date(datePublished);
-    let date = (dateObject) ?`${dateObject.toLocaleString('en-US', {month: 'short'})} ${dateObject.getMonth()+1}, ${dateObject.getFullYear()}` : '';
+    let date = (dateObject) ?`${dateObject.toLocaleString('en-US', {month: 'short'})} ${dateObject.getDate()}, ${dateObject.getFullYear()}` : '';
 
     
     let clickTimeout = null // for checking if double or single click
@@ -58,6 +58,8 @@ export default function ListCard(props) {
             
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
+
+            // add a listen
         }
     }
     function handleClick(event, id){

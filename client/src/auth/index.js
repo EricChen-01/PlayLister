@@ -210,6 +210,7 @@ function AuthContextProvider(props) {
         return name;
     }
 
+
     return (
         <AuthContext.Provider value={{
             auth
