@@ -3,6 +3,7 @@ import GlobalStoreContext from '../store'
 import AuthContext from '../auth'
 import { ThemeProvider, createTheme} from '@mui/material/styles'
 
+import DeleteListModal from './ConfirmationModals/DeleteListModal'
 import ErrorAddList from './ErrorModals/ErrorAddList'
 import AppNav from './AppNav';
 import ListCard from './ListCard';
@@ -32,7 +33,6 @@ export default function HomeScreen() {
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
     const changed = useRef(false);
-    //const [expanded, setExpanded] = useState(false);
 
     useEffect(()=>{
         console.log('asdsad')
@@ -72,6 +72,7 @@ export default function HomeScreen() {
                         changed={toggleChanged}
                         expanded={store.expanded}
                         changeexpanded={handleExpand}
+                        selected={pair._id === ((store.currentList) ? store.currentList._id: false)}
                     />
                 ))
             }
@@ -129,6 +130,7 @@ export default function HomeScreen() {
                         {display}
                 </Grid>
                 <ErrorAddList/>
+                <DeleteListModal/>
             </Box>
         </ThemeProvider>
     )

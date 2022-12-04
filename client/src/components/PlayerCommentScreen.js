@@ -40,7 +40,7 @@ export default function PlayerCommentScreen(){
                 <Player/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                
+
             </TabPanel>
         </Box>
     )

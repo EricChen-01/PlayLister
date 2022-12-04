@@ -1,8 +1,9 @@
 import YouTube from 'react-youtube';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
-import {Box, Typography, Button} from '@mui/material';
+import {Box, Typography, IconButton, Card, Grid} from '@mui/material';
+import {SkipPrevious,SkipNext, Pause, PlayArrow} from '@mui/icons-material';
 
 export default function YouTubePlayerExample() {
     const {store} = useContext(GlobalStoreContext);
@@ -16,7 +17,8 @@ export default function YouTubePlayerExample() {
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let playlist = [];
     if(store.currentList){
-        playlist = store.currentList.songs.map(song => song.youTubeId);
+        //playlist = store.currentList.songs.map(song => song.youTubeId);
+        playlist = store.currentList.songs;
     }
     /*
     let playlist = [
@@ -26,7 +28,10 @@ export default function YouTubePlayerExample() {
     ];
     */
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
-    let [currentSong,setCurrentSong] = useState(0);
+    //let [currentSongPlaying,setCurrentSongPlaying] = useState(0);
+    let currentSongPlaying = store.currentSongPlaying;
+    let setCurrentSongPlaying = store.setCurrentSongPlaying;
+    
     let [player,setPlayer] = useState({});
     const playerOptions = {
         height: '390',
@@ -40,22 +45,31 @@ export default function YouTubePlayerExample() {
     // THIS FUNCTION LOADS THE CURRENT SONG INTO
     // THE PLAYER AND PLAYS IT
     function loadAndPlayCurrentSong(player) {
-        let song = playlist[currentSong];
+        let song = (playlist[currentSongPlaying])?playlist[currentSongPlaying].youTubeId : null;
         player.loadVideoById(song);
         player.playVideo();
     }
 
     // INCREMENTS AND GOES TO NEXT SONG
     function nextSong() {
-        setCurrentSong(prevCurrentSong => prevCurrentSong + 1);
-        setCurrentSong(prevCurrentSong => prevCurrentSong % playlist.length);
+        let temp = currentSongPlaying;
+        if (temp + 1 >= playlist.length) {
+            console.log('yeo1')
+            setCurrentSongPlaying((temp + 1) % playlist.length);
+        }else{
+            console.log('yeo2')
+            setCurrentSongPlaying(temp + 1);
+
+        }
+    
     }
     // DECREMENTS AND GOES TO PREV SONG
     function prevSong() {
-        if (currentSong - 1 <= -1){
-            setCurrentSong(playlist.length - 1);
+        let temp = currentSongPlaying;
+        if (temp - 1 <= -1){
+            setCurrentSongPlaying(playlist.length - 1);
         }else{
-            setCurrentSong(prevCurrentSong => prevCurrentSong - 1);
+            setCurrentSongPlaying(temp - 1);
         }
         
     }
@@ -85,40 +99,63 @@ export default function YouTubePlayerExample() {
 
         if (status === -1) {
             // - 1: VIDEO UNSTARTED
-            console.log('- 1: VIDEO UNSTARTED');
         } else if (status === 0) {
             // 0: THE VIDEO HAS COMPLETED PLAYING
             nextSong();
         } else if (status === 1) {
             // 1: THE VIDEO IS PLAYED
-            console.log('1: THE VIDEO IS PLAYED');
         } else if (status === 2) {
             // 2: THE VIDEO IS PAUSED
-            console.log('2: THE VIDEO IS PAUSED');
         } else if (status === 3) {
             // 3: THE VIDEO IS BUFFERING
-            console.log('3: THE VIDEO IS BUFFERING');
         } else if (status === 5) {
             // 5: THE VIDEO HAS BEEN CUED
-            console.log('5: THE VIDEO HAS BEEN CUED');
             loadAndPlayCurrentSong(player);
         }
         
     }
 
 
+    let playlistDetails = 
+        <Box>
+            <Grid container direction="column">
+                <Grid item paddingLeft={1}>
+                    <Typography>Playlist: {(store.currentList)? store.currentList.name :''}</Typography> 
+                </Grid>
+                <Grid item paddingLeft={1}>
+                    <Typography>Song #: {currentSongPlaying + 1}</Typography>
+                </Grid>
+                <Grid item paddingLeft={1}>
+                    <Typography>Title: {(playlist[currentSongPlaying]) ? playlist[currentSongPlaying].title :''}</Typography>
+                </Grid>
+                <Grid item paddingLeft={1}>
+                    <Typography>Artist: {(playlist[currentSongPlaying]) ? playlist[currentSongPlaying].artist :''}</Typography>
+                </Grid>
+            </Grid>
+        </Box>
+
+    let playControllers = 
+        <Grid container justifyContent="center">
+            <Grid item>
+                <Card elevation={0}>
+                    <IconButton onClick={prevSong}><SkipPrevious/></IconButton>
+                    <IconButton onClick={pauseSong}><Pause/></IconButton>
+                    <IconButton onClick={playSong}><PlayArrow/></IconButton>
+                    <IconButton onClick={nextSong}><SkipNext/></IconButton>
+                </Card>
+            </Grid>
+        </Grid>
     return (
         <Box>
             <YouTube
-            videoId={playlist[currentSong]}
+            videoId={(playlist[currentSongPlaying])? playlist[currentSongPlaying].youTubeId : null}
             opts={playerOptions}
             onReady={onPlayerReady}
             onStateChange={onPlayerStateChange} />
-            <Typography>Current Song index: {currentSong}</Typography>
-            <Button onClick={nextSong}>Next</Button>
-            <Button onClick={prevSong}>Back</Button>
-            <Button onClick={pauseSong}>Pause</Button>
-            <Button onClick={playSong}>Play</Button>
+            <Card height='100%'>
+                {playControllers}
+                {playlistDetails}
+            </Card>
         </Box>
     )
 }

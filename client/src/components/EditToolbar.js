@@ -26,6 +26,8 @@ export default function EditToolbar(props){
     }
     const handleDeleteList = (event) => {
         event.stopPropagation();
+        console.log("ID of playlist is: "+idNamePair._id)
+        store.markListForDeletion(idNamePair._id);
     }
     const handleUndo = (event) => {
         event.stopPropagation();
@@ -43,7 +45,7 @@ export default function EditToolbar(props){
         }
         return (
             <Grid item>
-                <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Delete</Typography></Button>
+                <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handleDeleteList}><Typography color='black'>Delete</Typography></Button>
             </Grid>
         )
     }
@@ -68,7 +70,7 @@ export default function EditToolbar(props){
                 <Grid item>
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Add</Typography></Button>
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handlePublishList}><Typography color='black'>Publish</Typography></Button>
-                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Delete</Typography></Button>
+                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handleDeleteList}><Typography color='black'>Delete</Typography></Button>
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Duplicate</Typography></Button>
                 </Grid>
             </Grid>

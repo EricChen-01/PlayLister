@@ -1,7 +1,7 @@
 import { useContext, useState} from 'react'
 import GlobalStoreContext from '../store'
 import AuthContext from '../auth'
-import {IconButton,Icon, Grid,AppBar, Toolbar, Container,Box, Link, Typography, Menu, MenuItem, Avatar, InputBase,Paper} from '@mui/material'
+import {IconButton, Grid,AppBar, Toolbar, Container,Box, Typography, Menu, MenuItem, InputBase,Paper} from '@mui/material'
 import {Home, Groups, Person, Sort, SortByAlpha, DateRange, Replay, RecommendOutlined} from '@mui/icons-material';
 export default function AppNav(props) {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -38,7 +38,10 @@ export default function AppNav(props) {
         changed();
     }
     
-    const handleSortByName = () => {}
+    const handleSortByName = () => {
+        store.sortByName();
+        changed();
+    }
     const handleSortByPublishDate = () => {}
     const handleSortByListens = () => {}
     const handleSortByLikes = () => {}
@@ -47,7 +50,7 @@ export default function AppNav(props) {
 
     const menu =     
         <Box>
-            <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={null}>Name (A-Z) </Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={handleSortByName}>Name (A-Z) </Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><DateRange/><Typography onClick={null}>Publish Date (Newest)</Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><Replay/><Typography onClick={null}>Listens (High - Low)</Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><RecommendOutlined/><Typography onClick={null}>Likes (High - Low)</Typography></MenuItem>
