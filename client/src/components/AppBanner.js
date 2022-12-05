@@ -22,12 +22,6 @@ export default function AppBanner(){
     const handleLogOut = () => {
         auth.logoutUser();
     }
-    const goToLogin = () => {
-        history.push('/login')
-    }
-    const goToRegister = () => {
-        history.push('/register')
-    }
     function getAccountAvatar(loggedIn) {
         let userInitials = auth.getUserInitials();
         if (loggedIn) 
@@ -47,8 +41,8 @@ export default function AppBanner(){
     if (!auth.loggedIn){
         menuItems = 
             <Box>
-                <MenuItem onClick={handleMenuClose}><Typography onClick={goToLogin}>Login</Typography></MenuItem>
-                <MenuItem onClick={handleMenuClose}><Typography onClick={goToRegister}>Register</Typography></MenuItem>
+                <MenuItem onClick={handleMenuClose}><Link href="/login" color="inherit" underline="none">Login</Link></MenuItem>
+                <MenuItem onClick={handleMenuClose}><Link href="/register" color="inherit" underline="none">Register</Link></MenuItem>
             </Box>
     }else{
         menuItems=

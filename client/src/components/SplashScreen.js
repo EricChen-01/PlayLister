@@ -46,10 +46,6 @@ export default function SplashScreen() {
         auth.useAsGuest();
         history.push('/');
     };
-
-    const handleLogin = (event) => {
-        history.push('/login');
-    };
  
 
     const main = 
@@ -78,7 +74,7 @@ export default function SplashScreen() {
             <Box sx={{marginTop:'25%',marginBottom:'25%'}}>
                 <Grid container spacing={2}>
                     <Grid item>
-                        <Button pill variant='contained' onClick={handleLogin} sx={{boxShadow:23}}>
+                        <Button pill variant='contained' href='/login' sx={{boxShadow:23}}>
                             Log in
                         </Button>
                     </Grid>

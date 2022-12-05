@@ -150,6 +150,7 @@ getPlaylistPairs = async (req, res) => {
                             ownerName: user.firstName + " " + user.lastName,
                             datePublished: list.datePublished,
                             email: list.ownerEmail,
+                            listens: list.listens
                         };
                         pairs.push(pair);
                     }
@@ -181,6 +182,7 @@ getPublicPlaylistPairs = async (req,res) => {
                         ownerName: user.firstName + " " + user.lastName,
                         datePublished: list.datePublished,
                         email: list.ownerEmail,
+                        listens: list.listens
                     };
                     pairs.push(pair);
                 }
@@ -247,7 +249,7 @@ updatePlaylist = async (req, res) => {
                     list.songs = body.playlist.songs;
                     list.comments = body.playlist.comments;
                     list.datePublished = body.playlist.datePublished;
-
+                    list.listens = body.playlist.listens;
                     list
                         .save()
                         .then(() => {
@@ -278,6 +280,7 @@ updatePlaylist = async (req, res) => {
                     list.likes = body.playlist.likes;
                     list.dislikes = body.playlist.dislikes;
                     list.comments = body.playlist.comments;
+                    list.listens = body.playlist.listens;
                     list
                         .save()
                         .then(() => {

@@ -8,6 +8,7 @@ import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
 import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
+import { StarPurple500 } from '@mui/icons-material'
 
 export const GlobalStoreContext = createContext({});
 
@@ -511,8 +512,36 @@ function GlobalStoreContextProvider(props) {
         }else if (store.currentSelection == SearchSelection.USERS) {
             console.log('selection is USERS');
             asyncLoadPublicIdNamePairs();
+        }   
+    }
+    store.addListen = function(id){
+        async function asyncAddListen(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                playlist.listens = playlist.listens + 1;
+                let res = await api.updatePlaylistById(playlist._id,playlist);
+                if (res.data.success){
+                    store.loadIdNamePairs();
+                }
+            }
         }
-        
+        asyncAddListen(id);
+    }
+    store.updateRating = function(likes,dislikes,id){
+        async function asyncUpdateRating(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                playlist.likes = likes;
+                playlist.dislikes = dislikes;
+                let res = await api.updatePlaylistById(playlist._id,playlist);
+                if (res.data.success){
+                    store.loadIdNamePairs();
+                }
+            }
+        }
+        asyncUpdateRating(id);
     }
     store.changeSelectionToHome = function() {
 

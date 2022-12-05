@@ -3,8 +3,8 @@ import GlobalStoreContext from '../store';
 import AuthContext from '../auth';
 import Workspace from './Workspace';
 
-import {Card,ListItem,Typography, Box, Grid,Collapse, IconButton, Divider, TextField} from '@mui/material';
-import {ThumbUpOffAlt,ThumbDownOffAlt, ThumbDown,ThumbUp, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown} from '@mui/icons-material';
+import {Card,ListItem,Typography, Box, Grid,Collapse, IconButton, Divider, TextField, ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {ThumbUpOffAlt,ThumbDownOffAlt, KeyboardDoubleArrowUp, KeyboardDoubleArrowDown} from '@mui/icons-material';
 
 
 export default function ListCard(props) {
@@ -12,6 +12,10 @@ export default function ListCard(props) {
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
+    const [listened, setListened] = useState(false);
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
+    const [setting,setSetting] = useState('');
     let published = idNamePair.public;
     let ownerName = idNamePair.ownerName;
     let listName = idNamePair.name;
@@ -19,14 +23,18 @@ export default function ListCard(props) {
     let dislikes = idNamePair.dislikes;
     let datePublished = idNamePair.datePublished;
     let dateObject = new Date(datePublished);
+    let listens = idNamePair.listens;
     let date = (dateObject) ?`${dateObject.toLocaleString('en-US', {month: 'short'})} ${dateObject.getDate()}, ${dateObject.getFullYear()}` : '';
-
     
     let clickTimeout = null // for checking if double or single click
     const colors = {
         GOLD: 'rgb(212,212,145)',
         BLUEGRAY: 'rgb(212,212,245)',
         CREAM: '#FFFFEA'
+    }
+
+    const handleNewSetting = (event,newSetting) => {
+        setSetting(newSetting)
     }
 
     const handleChange = (id) => (event) => {
@@ -54,7 +62,10 @@ export default function ListCard(props) {
             if (_id.indexOf('list-card-text-') >= 0){
                 _id = ("" + _id).substring("list-card-text-".length);
             }
-            
+            if(published && !listened){
+                store.addListen(id);
+                setListened(true);
+            }
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
         }
@@ -80,6 +91,44 @@ export default function ListCard(props) {
             store.changeListName(id, text);
             toggleEdit();
         }
+    }
+
+    function handleLike(event) {
+        event.stopPropagation();
+        if(liked){
+            console.log('handle like and liked')
+            likes = likes - 1;
+            setLiked(false);
+        }else{
+            if(disliked){
+                likes = likes + 1;
+                dislikes = dislikes - 1;
+                setLiked(true);
+                setDisliked(false);
+            }else{
+                likes = likes + 1;
+                setLiked(true);
+            }
+        }
+        store.updateRating(likes,dislikes,idNamePair._id);
+    }
+    function handleDislike(event){
+        event.stopPropagation();
+        if(disliked){
+            dislikes = dislikes - 1;
+            setDisliked(false);
+        }else{
+            if(liked){
+                likes = likes - 1;
+                dislikes = dislikes + 1;
+                setLiked(false);
+                setDisliked(true);
+            }else{
+                dislikes = dislikes + 1;
+                setDisliked(true);
+            }
+        }
+        store.updateRating(likes,dislikes,idNamePair._id);
     }
     
     let collapse = 
@@ -107,14 +156,26 @@ export default function ListCard(props) {
                                 <Typography fontWeight='bold'>{listName}</Typography>
                                 <Typography>By: {ownerName}</Typography>
                                 <Typography>published: {date}</Typography>
-                                <Typography>listens: {}</Typography>
+                                <Typography>listens: {listens}</Typography>
                             </Grid>
                             <Grid item direction='row'>
                                 <Grid container>
-                                    <ThumbUpOffAlt/>
-                                    <Typography>{likes}</Typography>
-                                    <ThumbDownOffAlt/>
-                                    <Typography>{dislikes}</Typography>
+                                    <ToggleButtonGroup
+                                        value={setting}
+                                        exclusive
+                                        onChange={handleNewSetting}
+                                    >   
+                                        <ToggleButton value='up' onClick={handleLike}><ThumbUpOffAlt/></ToggleButton>
+                                        <Grid container alignItems='center'>
+                                            <Typography>{likes}</Typography>
+                                        </Grid>
+                                        <ToggleButton value='down' onClick={handleDislike}>
+                                            <ThumbDownOffAlt/>
+                                        </ToggleButton>
+                                        <Grid container alignItems='center'>
+                                            <Typography>{dislikes}</Typography>
+                                        </Grid>
+                                    </ToggleButtonGroup>
                                 </Grid>
                             </Grid>
                         </Grid>
