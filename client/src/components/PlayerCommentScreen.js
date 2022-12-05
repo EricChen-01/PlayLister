@@ -30,7 +30,7 @@ export default function PlayerCommentScreen(){
       };
 
     return(
-        <Box height='100%'>
+        <Box>
             <Paper>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Player"/>

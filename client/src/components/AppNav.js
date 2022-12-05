@@ -17,11 +17,17 @@ export default function AppNav(props) {
     const handleMenuClose = () => {
         setAnchorEl(null);
     }
-
+    const handleTextChange = (event) =>{
+        let text = event.target.value;
+        console.log('current text is: '+text);
+        store.setSearchText(text);
+    }
     const handleSearch = (event) =>{
         if(event.key === 'Enter'){
+            let text = event.target.value;
             console.log('You search is: ' + event.target.value + 'Selection is: ' + store.currentSelection);
-         }
+            store.search(text);
+        }
     }
     const handleHome = () => {
         store.changeSelectionToHome();
@@ -66,7 +72,7 @@ export default function AppNav(props) {
             <MenuItem onClick={handleMenuClose}><DateRange/><Typography onClick={handleSortByPublishDate}>Publish Date (Newest)</Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><Replay/><Typography onClick={handleSortByListens}>Listens (High - Low)</Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><RecommendOutlined/><Typography onClick={handleSortByLikes}>Likes (High - Low)</Typography></MenuItem>
-            <MenuItem onClick={handleMenuClose}><RecommendOutlined style={{transform: 'scaleY(-1)'}}/><Typography onClick={null}>Dislikes (High - Low)</Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><RecommendOutlined style={{transform: 'scaleY(-1)'}}/><Typography onClick={handleSortByDislikes}>Dislikes (High - Low)</Typography></MenuItem>
         </Box>
     return(
         <AppBar position="static" elevation='0' style={{backgroundColor:"rgba(255, 0, 0, 0)"}}>
@@ -94,7 +100,7 @@ export default function AppNav(props) {
                         </Grid>
                         <Grid item xs={8} md={10}>
                             <Paper>
-                                <InputBase onKeyDown={handleSearch} sx={{pl: 1, flex: 1 }} fullWidth placeholder="Search"/>
+                                <InputBase onChange={handleTextChange} onKeyDown={handleSearch} sx={{pl: 1, flex: 1 }} fullWidth placeholder="Search"/>
                             </Paper>
                         </Grid>
                         <Grid item>

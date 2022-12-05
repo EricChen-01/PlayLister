@@ -59,7 +59,7 @@ export default function SongCard(props) {
         // DOUBLE CLICK IS FOR SONG EDITING
         event.stopPropagation();
         if (event.detail === 2) {
-            //store.showEditSongModal(index, song);
+            store.markSongForEdit(index, song);
         }
     }
 
@@ -78,32 +78,7 @@ export default function SongCard(props) {
             </Card>
         </ListItem> 
 
-    let unpublishedCard =     
-        <ListItem disableGutters >
-           <Card sx={{width:'100%',border: '1px solid black',backgroundColor: (isCurrentSong) ? colors.GOLD : colors.BLUEGRAY}}>
-                <Container>
-                    <Grid container width='100%' alignItems="center" justifyContent="space-between">
-                        <Grid item width='80%'>
-                            <Box>
-                                <Typography>{index + 1}. {song.title} by {song.artist}</Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item>
-                            <IconButton onClick={handleRemoveSong}><Close/></IconButton>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Card>
-        </ListItem> 
-
-    let card = "";
-    if(published){
-        card = publishedCard;
-    }else{
-        card = unpublishedCard;
-    }
-    
-    return(
+    let unpublishedCard =
         <Box
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
@@ -113,7 +88,32 @@ export default function SongCard(props) {
             draggable="true"
             onClick={handleClick}
         >
-            {card}
+            <ListItem disableGutters >
+            <Card sx={{width:'100%',border: '1px solid black',backgroundColor: (isCurrentSong) ? colors.GOLD : colors.BLUEGRAY}}>
+                    <Container>
+                        <Grid container width='100%' alignItems="center" justifyContent="space-between">
+                            <Grid item width='80%'>
+                                <Box>
+                                    <Typography>{index + 1}. {song.title} by {song.artist}</Typography>
+                                </Box>
+                            </Grid>
+                            <Grid item>
+                                <IconButton onClick={handleRemoveSong}><Close/></IconButton>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </Card>
+            </ListItem> 
         </Box>
+
+    let card = "";
+    if(published){
+        card = publishedCard;
+    }else{
+        card = unpublishedCard;
+    }
+    
+    return(
+        card
     )
 }

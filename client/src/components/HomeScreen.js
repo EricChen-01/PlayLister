@@ -3,12 +3,15 @@ import GlobalStoreContext from '../store'
 import AuthContext from '../auth'
 import { ThemeProvider, createTheme} from '@mui/material/styles'
 
+import DuplicateListModal from './ConfirmationModals/DuplicateListModal'
 import DeleteSongModal from  './ConfirmationModals/DeleteSongModal'
 import DeleteListModal from './ConfirmationModals/DeleteListModal'
+import EditSongModal from './ConfirmationModals/EditSongModal';
 import ErrorAddList from './ErrorModals/ErrorAddList'
 import AppNav from './AppNav';
 import ListCard from './ListCard';
 import PlayerCommentScreen from './PlayerCommentScreen';
+
 
 import {Box, Grid, Typography, List, ListItem, Card} from '@mui/material';
 import Button from './PillButton';
@@ -78,14 +81,9 @@ export default function HomeScreen() {
             }
             </List>;
     }
-    let temp = '';
-    if(store.currentList){
-        temp = store.currentList.name;
-    } 
     if(store.currentSelection == "HOME" ){
         display = 
         <Grid item>
-            {temp}
             <Button pill variant='text' color='neutral' disableElevation onClick={handleAddList}>
                 <Grid container fontSize='58px' spacing={0} direction="row" alignItems="center" justifyContent="center">
                     <Grid item>
@@ -132,6 +130,8 @@ export default function HomeScreen() {
                 <ErrorAddList/>
                 <DeleteListModal/>
                 <DeleteSongModal/>
+                <DuplicateListModal/>
+                {(store.currentSong)?<EditSongModal/>:''}
             </Box>
         </ThemeProvider>
     )

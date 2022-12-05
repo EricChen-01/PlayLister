@@ -3,8 +3,12 @@ import Button from '../PillButton'
 import { useContext} from 'react'
 import GlobalStoreContext from '../../store'
 
-export default function DeleteSongModal() {
+export default function DuplicateList() {
     const { store } = useContext(GlobalStoreContext);
+    let title = '[insert name here]';
+    if(store.listMarkedForDuplication && store.listIdMarkedForDuplication){
+        title = store.listMarkedForDuplication.name;
+    }
     const style = {
         position: 'absolute',
         top: '50%',
@@ -17,26 +21,21 @@ export default function DeleteSongModal() {
         p: 4,
     };
 
-    let songTitle = "";
-    if (store.currentSong) {
-        songTitle = store.currentSong.title;
-    }
-
     function handleConfirm(){
-        store.addRemoveSongTransaction();
+        store.duplicateList();
     }
     function handleCancel(){
         store.hideModals(); // indirectly unmarks it
     }
 
-
+    
     return (
-        <Modal open={store.currentModal == "REMOVE_SONG"} onClose={handleCancel}>
+        <Modal open={store.currentModal == "DUPLICATE_LIST"} onClose={handleCancel}>
             <Card sx={style}>
-                <Typography>Are you sure you want to delete this song?</Typography>
+                <Typography>Are you sure you want to duplicate this list?</Typography>
                 <Grid container justifyContent='center'>
                     <Grid item>
-                        <Typography fontWeight='bold' >{songTitle}</Typography>
+                        <Typography fontWeight='bold' >{title}</Typography>
                     </Grid>
                 </Grid>
                 <Box paddingTop={2} paddingBottom={2}><Divider padding={2}/></Box>

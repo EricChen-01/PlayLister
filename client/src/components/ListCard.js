@@ -35,7 +35,6 @@ export default function ListCard(props) {
         changeexpanded(id);
     }
 
-
     function toggleEdit() {
         let newActive = !editActive;
         if (newActive) {

@@ -17,6 +17,7 @@ export default function EditToolbar(props){
 
     const handleAddSong = (event) => {
         event.stopPropagation();
+        store.addNewSong();
     }
     const handlePublishList = (event) => {
         event.stopPropagation();
@@ -26,7 +27,6 @@ export default function EditToolbar(props){
     }
     const handleDeleteList = (event) => {
         event.stopPropagation();
-        console.log("ID of playlist is: "+idNamePair._id)
         store.markListForDeletion(idNamePair._id);
     }
     const handleUndo = (event) => {
@@ -39,6 +39,7 @@ export default function EditToolbar(props){
     }
     const handleDuplicateList = (event) => {
         event.stopPropagation();
+        store.markListForDuplication(idNamePair._id);
     }
 
     let showDelete = () => {
@@ -57,7 +58,7 @@ export default function EditToolbar(props){
             <Grid container justifyContent="flex-end">
                 {showDelete()}
                 <Grid item>
-                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Duplicate</Typography></Button>
+                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handleDuplicateList}><Typography color='black'>Duplicate</Typography></Button>
                 </Grid>
             </Grid>
         </Box>  
@@ -70,10 +71,10 @@ export default function EditToolbar(props){
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} disabled={!store.canUndo()} onClick={handleUndo}><Typography color='black'>Undo</Typography></Button>
                 </Grid>
                 <Grid item>
-                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Add</Typography></Button>
+                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handleAddSong}><Typography color='black'>Add</Typography></Button>
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handlePublishList}><Typography color='black'>Publish</Typography></Button>
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handleDeleteList}><Typography color='black'>Delete</Typography></Button>
-                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Duplicate</Typography></Button>
+                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} onClick={handleDuplicateList}><Typography color='black'>Duplicate</Typography></Button>
                 </Grid>
             </Grid>
         </Box>  
