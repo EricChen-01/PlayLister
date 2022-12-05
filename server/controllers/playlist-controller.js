@@ -209,7 +209,6 @@ getPlaylists = async (req, res) => {
 updatePlaylist = async (req, res) => {
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
-    console.log("req.body.name: " + req.body.name);
 
     if (!body) {
         return res.status(400).json({
@@ -238,11 +237,8 @@ updatePlaylist = async (req, res) => {
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
                 if (user._id == req.userId) {
                     console.log("correct user!");
-                    console.log("req.body.name: " + req.body.name);
 
                     list.name = body.playlist.name;
                     list.likes = body.playlist.likes;

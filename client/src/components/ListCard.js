@@ -31,7 +31,7 @@ export default function ListCard(props) {
 
     const handleChange = (id) => (event) => {
         event.stopPropagation();
-        handleLoadList(event,id);
+        //handleLoadList(event,id);
         changeexpanded(id);
     }
 
@@ -58,8 +58,6 @@ export default function ListCard(props) {
             
             // CHANGE THE CURRENT LIST
             store.setCurrentList(id);
-
-            // add a listen
         }
     }
     function handleClick(event, id){
@@ -94,7 +92,7 @@ export default function ListCard(props) {
 
     let publishedCard = 
         <ListItem 
-            sx={{maxWidth:545}}
+            sx={{maxWidth:645}}
             disableGutters 
             id={idNamePair._id}
             key={idNamePair._id}
@@ -102,7 +100,7 @@ export default function ListCard(props) {
                 handleLoadList(event, idNamePair._id)
             }}
             >
-            <Card sx={{width:545, minHeight:100,backgroundColor: (selected) ? colors.GOLD : colors.BLUEGRAY, '&:hover':{border:'1px solid black'} }}>
+            <Card sx={{width:645, minHeight:100,backgroundColor: (selected) ? colors.GOLD : colors.BLUEGRAY, '&:hover':{border:'1px solid black'} }}>
                 <Grid container direction='column'>
                     <Grid item width='100%'>
                         <Grid container direction='row' justifyContent='space-between' alignItems='center'>
@@ -139,14 +137,13 @@ export default function ListCard(props) {
     let unpublishedCard =     
         <ListItem 
             disableGutters 
-            sx={{maxWidth:545}} 
+            sx={{maxWidth:645}} 
             id={idNamePair._id} 
             key={idNamePair._id}
             onClick={(event) => {
                 handleClick(event,idNamePair._id);
-                //handleLoadList(event, idNamePair._id)
             }}>
-           <Card sx={{ width: 545, minHeight:100,backgroundColor: (selected) ? colors.GOLD : colors.CREAM}}>
+           <Card sx={{ width: 645, minHeight:100,backgroundColor: (selected) ? colors.GOLD : colors.CREAM, '&:hover':{border:'1px solid black'}}}>
                 <Grid container direction='column'>
                     <Grid item>
                         <Typography fontWeight='bold'>{listName}</Typography>

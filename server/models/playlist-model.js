@@ -21,10 +21,10 @@ const playlistSchema = new Schema(
         }], required: true },
 
         comments: { type: [{
-            userId: { type: String, required: true},
-            firstName: {type: String, required: true},
-            lastName: {type: String, required: true},
-            message: { type: String, required: true}
+            email: { type: String},
+            firstName: {type: String},
+            lastName: {type: String},
+            message: { type: String}
         }],required: true},
         datePublished: {type: Date},
     },

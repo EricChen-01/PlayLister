@@ -1,4 +1,4 @@
-import {Box, Grid, Typography, List, ListItem, Card} from '@mui/material';
+import {Box, Grid, Typography, Divider} from '@mui/material';
 import {useContext} from 'react'
 import Button from './PillButton';
 import GlobalStoreContext from '../store';
@@ -31,9 +31,11 @@ export default function EditToolbar(props){
     }
     const handleUndo = (event) => {
         event.stopPropagation();
+        store.undo();
     }
     const handleRedo = (event) => {
         event.stopPropagation();
+        store.redo();
     }
     const handleDuplicateList = (event) => {
         event.stopPropagation();
@@ -64,8 +66,8 @@ export default function EditToolbar(props){
         <Box>
             <Grid container>
                 <Grid item>
-                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Redo</Typography></Button>
-                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Undo</Typography></Button>
+                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} disabled={!store.canRedo()} onClick={handleRedo}><Typography color='black'>Redo</Typography></Button>
+                    <Button pill variant='contained' size='small' sx={buttonStyle.toolbar} disabled={!store.canUndo()} onClick={handleUndo}><Typography color='black'>Undo</Typography></Button>
                 </Grid>
                 <Grid item>
                     <Button pill variant='contained' size='small' sx={buttonStyle.toolbar}><Typography color='black'>Add</Typography></Button>
@@ -87,7 +89,8 @@ export default function EditToolbar(props){
         }
     }
     return(
-        <Box border={2} width='100%'>
+        <Box width='100%'>
+            <Divider/>
             {toolbar}
         </Box>
     )

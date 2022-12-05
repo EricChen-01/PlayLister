@@ -3,6 +3,7 @@ import GlobalStoreContext from '../store'
 import AuthContext from '../auth'
 import { ThemeProvider, createTheme} from '@mui/material/styles'
 
+import DeleteSongModal from  './ConfirmationModals/DeleteSongModal'
 import DeleteListModal from './ConfirmationModals/DeleteListModal'
 import ErrorAddList from './ErrorModals/ErrorAddList'
 import AppNav from './AppNav';
@@ -113,14 +114,14 @@ export default function HomeScreen() {
                 </Box>
                 <Box height='80%'>
                     <Grid container sx={{height:'100%'}}>
-                        <Grid item xs={6} sx={{overflow:'auto',height:'100%'}}>
+                        <Grid item xs={7} sx={{overflow:'auto',height:'100%'}}>
                             <Box>
                                 <List>
                                     {lists}
                                 </List>
                             </Box>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={4}>
                             <PlayerCommentScreen/>
                         </Grid>
                     </Grid>
@@ -130,6 +131,7 @@ export default function HomeScreen() {
                 </Grid>
                 <ErrorAddList/>
                 <DeleteListModal/>
+                <DeleteSongModal/>
             </Box>
         </ThemeProvider>
     )

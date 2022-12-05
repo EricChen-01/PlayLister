@@ -11,7 +11,14 @@ export default function CommentScreen() {
     const {auth} = useContext(AuthContext);
     const [text,setText] = useState('');
     const handleAddNewComment = () => {
-        
+        let newComment = {
+            email: auth.user.email,
+            firstName: auth.user.firstName,
+            lastName: auth.user.lastName,
+            message: text
+        }
+        setText('');
+        store.sendComment(newComment);
     }
 
     let comments = ''
@@ -31,7 +38,8 @@ export default function CommentScreen() {
                 {comments}
                 <Grid container justifyContent='space-between' alignItems='center' >
                     <Grid item xs={10}>
-                        <TextField onChange={(newValue) => setText(newValue.target.value)}disabled={auth.guest} id='comment' label='Comment' variant="outlined" sx={{width:'100%',padding:'2px'}} multiline/>
+                        <Typography paddingLeft={1} sx={{color:'gray'}}>comment</Typography>
+                        <TextField value={text} onChange={(newValue) => setText(newValue.target.value)} disabled={auth.guest} id='comment' variant="outlined" sx={{width:'100%',padding:'2px'}} multiline/>
                     </Grid>
                     <Grid item xs={2}>
                         <IconButton onClick={handleAddNewComment} disabled={auth.guest}>

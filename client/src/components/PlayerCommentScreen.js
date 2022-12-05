@@ -34,7 +34,7 @@ export default function PlayerCommentScreen(){
             <Paper>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Player"/>
-                    <Tab label="Comment" disabled={!store.currentList}/>
+                    <Tab label="Comment" disabled={store.currentList && (store.currentList.isPublished === false)}/>
                 </Tabs>
             </Paper>
             <Box height='80%'>
