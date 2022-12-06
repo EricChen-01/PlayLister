@@ -92,7 +92,11 @@ export default function ListCard(props) {
             toggleEdit();
         }
     }
-
+    function handleViewUser(event) {
+        event.stopPropagation();
+        store.viewUser(event.target.innerText);
+        changed();
+    }
     function handleLike(event) {
         event.stopPropagation();
         if(liked){
@@ -154,7 +158,7 @@ export default function ListCard(props) {
                         <Grid container direction='row' justifyContent='space-between' alignItems='center'>
                             <Grid item>
                                 <Typography fontWeight='bold'>{listName}</Typography>
-                                <Typography>By: {ownerName}</Typography>
+                                <Typography>By: <Typography sx={{textDecoration:'underline'}} display='inline' onClick={handleViewUser}>{ownerName}</Typography></Typography>
                                 <Typography>published: {date}</Typography>
                                 <Typography>listens: {listens}</Typography>
                             </Grid>

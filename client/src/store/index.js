@@ -29,7 +29,8 @@ export const GlobalStoreActionType = {
     MARK_LIST_FOR_DUPLICATION: "MARK_LIST_FOR_DUPLICATION",
     SET_SEARCH_TEXT: "SET_SEARCH_TEXT",
     CLOSE_CURRENT_LIST : "CLOSE_CURRENT_LIST",
-    MARK_SONG_FOR_EDIT: "MARK_SONG_FOR_EDIT"
+    MARK_SONG_FOR_EDIT: "MARK_SONG_FOR_EDIT",
+    VIEW_USER : "VIEW_USER",
 }
 
 const tps = new jsTPS();
@@ -195,7 +196,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore((prevState)=>({
                     currentModal : CurrentModal.NONE,
                     currentSelection: payload,
-                    searchText: prevState.searchText,
+                    searchText: '',
                     sortSelection: SortSelection.NONE,
                     idNamePairs: [],
                     currentList: null,
@@ -435,6 +436,26 @@ function GlobalStoreContextProvider(props) {
                     expanded: prevState.expanded,
                     currentSongPlaying: prevState.currentSongPlaying,
                 }));
+            }
+            case GlobalStoreActionType.VIEW_USER: {
+                return setStore((prevState)=>({
+                    currentModal : CurrentModal.NONE,
+                    currentSelection: SearchSelection.USERS,
+                    searchText: payload,
+                    sortSelection: SortSelection.NONE,
+                    idNamePairs: [],
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: prevState.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    listIdMarkedForDuplication: null,
+                    listMarkedForDuplication: null,
+                    expanded: false,
+                    currentSongPlaying: prevState.currentSongPlaying,
+                })); 
             }
             default:
                 return store;
@@ -966,6 +987,12 @@ function GlobalStoreContextProvider(props) {
         };
         let transaction = new UpdateSong_Transaction(this, index, oldSongData, newSongData);        
         tps.addTransaction(transaction);
+    }
+    store.viewUser = function(username){
+        storeReducer({
+            type: GlobalStoreActionType.VIEW_USER,
+            payload: username
+        });
     }
     return (
         <GlobalStoreContext.Provider value={{
