@@ -169,11 +169,11 @@ export default function ListCard(props) {
                                         exclusive
                                         onChange={handleNewSetting}
                                     >   
-                                        <ToggleButton value='up' onClick={handleLike}><ThumbUpOffAlt/></ToggleButton>
+                                        <ToggleButton disabled={auth.guest} value='up' onClick={handleLike}><ThumbUpOffAlt/></ToggleButton>
                                         <Grid container alignItems='center'>
                                             <Typography>{likes}</Typography>
                                         </Grid>
-                                        <ToggleButton value='down' onClick={handleDislike}>
+                                        <ToggleButton disabled={auth.guest} value='down' onClick={handleDislike}>
                                             <ThumbDownOffAlt/>
                                         </ToggleButton>
                                         <Grid container alignItems='center'>

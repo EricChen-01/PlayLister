@@ -120,7 +120,7 @@ export default function HomeScreen() {
                             </Box>
                         </Grid>
                         <Grid item xs={4}>
-                            <PlayerCommentScreen/>
+                            <PlayerCommentScreen changed={toggleChanged}/>
                         </Grid>
                     </Grid>
                 </Box>

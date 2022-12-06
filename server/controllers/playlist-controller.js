@@ -223,91 +223,122 @@ updatePlaylist = async (req, res) => {
         })
     }
     if (req.userId == "GUEST"){
-        return res.status(401).json({
-            success: false,
-            message: 'unauthorized',
+        Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
+            console.log("playlist found: " + JSON.stringify(playlist));
+            if (err) {
+                return res.status(404).json({
+                    err,
+                    message: 'Playlist not found!',
+                })
+            }   
+            if(!playlist.isPublished){
+                console.log('playlist is not published. cannot update as regular user')
+                return res.status(401).json({
+                    success: false,
+                    message: 'unauthorized',
+                })
+            }
+            console.log("GUEST user! Updating only listens");
+            playlist.listens = body.playlist.listens;
+            playlist
+                .save()
+                .then(() => {
+                    console.log("SUCCESS!!!");
+                    return res.status(200).json({
+                        success: true,
+                        id: playlist._id,
+                        message: 'This is not your playlist. So only listens were updated',
+                    })
+                })
+                .catch(error => {
+                    console.log("FAILURE: " + JSON.stringify(error));
+                    return res.status(404).json({
+                        error,
+                        message: 'Playlist not updated!',
+                    })
+                })
+        })
+    }else{
+        Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
+            console.log("playlist found: " + JSON.stringify(playlist));
+            if (err) {
+                return res.status(404).json({
+                    err,
+                    message: 'Playlist not found!',
+                })
+            }
+    
+    
+            
+            // DOES THIS LIST BELONG TO THIS USER?
+            async function asyncFindUser(list) {
+                await User.findOne({ email: list.ownerEmail }, (err, user) => {
+                    if (user._id == req.userId) {
+                        console.log("correct user!");
+    
+                        list.name = body.playlist.name;
+                        list.likes = body.playlist.likes;
+                        list.dislikes = body.playlist.dislikes;
+                        list.isPublished = body.playlist.isPublished;
+                        list.songs = body.playlist.songs;
+                        list.comments = body.playlist.comments;
+                        list.datePublished = body.playlist.datePublished;
+                        list.listens = body.playlist.listens;
+                        list
+                            .save()
+                            .then(() => {
+                                console.log("SUCCESS!!!");
+                                return res.status(200).json({
+                                    success: true,
+                                    id: list._id,
+                                    message: 'Playlist updated!',
+                                })
+                            })
+                            .catch(error => {
+                                console.log("FAILURE: " + JSON.stringify(error));
+                                return res.status(404).json({
+                                    error,
+                                    message: 'Playlist not updated!',
+                                })
+                            })
+                    }else {
+    
+                        if(!list.isPublished){
+                            console.log('playlist is not published. cannot update as regular user')
+                            return res.status(401).json({
+                                success: false,
+                                message: 'unauthorized',
+                            })
+                        }
+                        console.log("regular user! Updating only comments, likes, and dislikes");
+                        list.likes = body.playlist.likes;
+                        list.dislikes = body.playlist.dislikes;
+                        list.comments = body.playlist.comments;
+                        list.listens = body.playlist.listens;
+                        list
+                            .save()
+                            .then(() => {
+                                console.log("SUCCESS!!!");
+                                return res.status(200).json({
+                                    success: true,
+                                    id: list._id,
+                                    message: 'This is not your playlist. So only comments, likes, and dislikes were updated',
+                                })
+                            })
+                            .catch(error => {
+                                console.log("FAILURE: " + JSON.stringify(error));
+                                return res.status(404).json({
+                                    error,
+                                    message: 'Playlist not updated!',
+                                })
+                            })
+                    }
+                    
+                });
+            }
+            asyncFindUser(playlist);
         })
     }
-    
-    Playlist.findOne({ _id: req.params.id }, (err, playlist) => {
-        console.log("playlist found: " + JSON.stringify(playlist));
-        if (err) {
-            return res.status(404).json({
-                err,
-                message: 'Playlist not found!',
-            })
-        }
-
-
-        
-        // DOES THIS LIST BELONG TO THIS USER?
-        async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                if (user._id == req.userId) {
-                    console.log("correct user!");
-
-                    list.name = body.playlist.name;
-                    list.likes = body.playlist.likes;
-                    list.dislikes = body.playlist.dislikes;
-                    list.isPublished = body.playlist.isPublished;
-                    list.songs = body.playlist.songs;
-                    list.comments = body.playlist.comments;
-                    list.datePublished = body.playlist.datePublished;
-                    list.listens = body.playlist.listens;
-                    list
-                        .save()
-                        .then(() => {
-                            console.log("SUCCESS!!!");
-                            return res.status(200).json({
-                                success: true,
-                                id: list._id,
-                                message: 'Playlist updated!',
-                            })
-                        })
-                        .catch(error => {
-                            console.log("FAILURE: " + JSON.stringify(error));
-                            return res.status(404).json({
-                                error,
-                                message: 'Playlist not updated!',
-                            })
-                        })
-                }else {
-
-                    if(!list.isPublished){
-                        console.log('playlist is not published. cannot update as regular user')
-                        return res.status(401).json({
-                            success: false,
-                            message: 'unauthorized',
-                        })
-                    }
-                    console.log("regular user! Updating only comments, likes, and dislikes");
-                    list.likes = body.playlist.likes;
-                    list.dislikes = body.playlist.dislikes;
-                    list.comments = body.playlist.comments;
-                    list.listens = body.playlist.listens;
-                    list
-                        .save()
-                        .then(() => {
-                            console.log("SUCCESS!!!");
-                            return res.status(200).json({
-                                success: true,
-                                id: list._id,
-                                message: 'This is not your playlist. So only comments, likes, and dislikes were updated',
-                            })
-                        })
-                        .catch(error => {
-                            console.log("FAILURE: " + JSON.stringify(error));
-                            return res.status(404).json({
-                                error,
-                                message: 'Playlist not updated!',
-                            })
-                        })
-                }
-                
-            });
-        }
-        asyncFindUser(playlist);
-    })
 }
 getUser = async (id) =>{
     user = User.findById(id,(err,user) => {

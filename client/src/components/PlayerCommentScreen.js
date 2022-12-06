@@ -20,11 +20,11 @@ function TabPanel(props) {
     );
 }
 
-export default function PlayerCommentScreen(){
+export default function PlayerCommentScreen(props){
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
     const [value,setValue] = useState(0);
-
+    const {changed} = props
     const handleChange = (event, newValue) => {
         setValue(newValue);
       };
@@ -45,7 +45,7 @@ export default function PlayerCommentScreen(){
               </Box>
               <Box>
                 <TabPanel value={value} index={1}>
-                  <CommentScreen/>
+                  <CommentScreen changed={changed}/>
                 </TabPanel>
               </Box>
             </Box>

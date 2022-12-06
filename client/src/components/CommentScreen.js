@@ -6,9 +6,10 @@ import {Box, Typography, IconButton, Card, Grid, List, TextField} from '@mui/mat
 import {Send} from '@mui/icons-material';
 import CommentCard from './CommentCard'
 
-export default function CommentScreen() {
+export default function CommentScreen(props) {
     const {store} = useContext(GlobalStoreContext);
     const {auth} = useContext(AuthContext);
+    const {changed} = props
     const [text,setText] = useState('');
     const handleAddNewComment = () => {
         let newComment = {
@@ -27,7 +28,7 @@ export default function CommentScreen() {
         <List sx={{overflow:'auto', width: '90%', left: '5%', height: '100%'}}>
             {
                 store.currentList.comments.map((comment) => (
-                    <CommentCard comment={comment}/>
+                    <CommentCard comment={comment} changed={changed}/>
                 ))
             }
         </List>;
