@@ -10,9 +10,9 @@ import {Box,Typography,Tab,Tabs,Grid,Card,Paper} from '@mui/material'
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
-      <div hidden={value !== index} {...other}>
+      <div hidden={value !== index}{...other}>
         {value === index && (
-          <Box>
+          <Box height='600px'>
             {children}
           </Box>
         )}
@@ -30,11 +30,11 @@ export default function PlayerCommentScreen(){
       };
 
     return(
-        <Box>
+        <Box height='100%'>
             <Paper>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Player"/>
-                    <Tab label="Comment" disabled={store.currentList && (store.currentList.isPublished === false)}/>
+                    <Tab label="Comment" disabled={!store.currentList || ( store.currentList && (store.currentList.isPublished === false))}/>
                 </Tabs>
             </Paper>
             <Box height='80%'>
@@ -43,7 +43,7 @@ export default function PlayerCommentScreen(){
                   <Player/>
                 </TabPanel>
               </Box>
-              <Box height='100%'>
+              <Box>
                 <TabPanel value={value} index={1}>
                   <CommentScreen/>
                 </TabPanel>

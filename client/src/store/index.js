@@ -8,7 +8,7 @@ import RemoveSong_Transaction from '../transactions/RemoveSong_Transaction'
 import MoveSong_Transaction from '../transactions/MoveSong_Transaction'
 import CreateSong_Transaction from '../transactions/CreateSong_Transaction'
 import UpdateSong_Transaction from '../transactions/UpdateSong_Transaction'
-import { StarPurple500 } from '@mui/icons-material'
+import { Store } from '@mui/icons-material'
 
 export const GlobalStoreContext = createContext({});
 
@@ -50,6 +50,8 @@ const SortSelection = {
     LISTENS: "LISTENS",
     LIKES: "LIKES",
     DISLIKES: "DISLIKES",
+    CREATION_DATE: "CREATION_DATE",
+    LAST_EDIT_DATE: "LAST_EDIT_DATE"
 }
 
 const SearchSelection = {
@@ -722,17 +724,33 @@ function GlobalStoreContextProvider(props) {
             payload: SortSelection.LISTENS
         });
     }
+    store.sortByCreationDate = function(){
+        storeReducer({
+            type: GlobalStoreActionType.SELECT_SORT_TYPE,
+            payload: SortSelection.CREATION_DATE
+        });
+    }
+    store.sortByLastEditDate = function(){
+        storeReducer({
+            type: GlobalStoreActionType.SELECT_SORT_TYPE,
+            payload: SortSelection.LAST_EDIT_DATE
+        });
+    }
     store.checkForSort = function(pairsArray){
         if(store.sortSelection === SortSelection.NAME){
             return pairsArray.sort((a,b) => a.name > b.name);
         }else if(store.sortSelection === SortSelection.PUBLISH_DATE){
             return  pairsArray.sort((a,b) => a.datePublished > b.datePublished);
         }else if (store.sortSelection === SortSelection.LISTENS){
-            return  pairsArray.sort((a,b) => a.listens > b.listens);
+            return  pairsArray.sort((a,b) => a.listens < b.listens);
         }else if (store.sortSelection === SortSelection.LIKES){
-            return  pairsArray.sort((a,b) => a.likes > b.likes);
+            return  pairsArray.sort((a,b) => a.likes < b.likes);
         }else if (store.sortSelection === SortSelection.DISLIKES){
-            return  pairsArray.sort((a,b) => a.dislikes > b.dislikes);
+            return  pairsArray.sort((a,b) => a.dislikes < b.dislikes);
+        }else if (store.sortSelection === SortSelection.CREATION_DATE){
+            return  pairsArray.sort((a,b) => a.createdAt > b.createdAt);
+        }else if(store.sortSelection === SortSelection.LAST_EDIT_DATE){
+            return  pairsArray.sort((a,b) => a.updatedAt < b.updatedAt);
         }
 
         return pairsArray;

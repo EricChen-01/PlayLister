@@ -150,7 +150,9 @@ getPlaylistPairs = async (req, res) => {
                             ownerName: user.firstName + " " + user.lastName,
                             datePublished: list.datePublished,
                             email: list.ownerEmail,
-                            listens: list.listens
+                            listens: list.listens,
+                            createdAt: list.createdAt,
+                            updatedAt: list.updatedAt
                         };
                         pairs.push(pair);
                     }
@@ -182,7 +184,9 @@ getPublicPlaylistPairs = async (req,res) => {
                         ownerName: user.firstName + " " + user.lastName,
                         datePublished: list.datePublished,
                         email: list.ownerEmail,
-                        listens: list.listens
+                        listens: list.listens,
+                        createdAt: list.createdAt,
+                        updatedAt: list.updatedAt
                     };
                     pairs.push(pair);
                 }

@@ -64,9 +64,17 @@ export default function AppNav(props) {
         store.sortByDislikes();
         changed();
     }
+    const handleSortByCreationDate = () => {
+        store.sortByCreationDate();
+        changed();
+    }
+    const handleSortByLastEditDate = () => {
+        store.sortByLastEditDate();
+        changed();
+    }
 
 
-    const menu =     
+    const nonHomeMenu =     
         <Box>
             <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={handleSortByName}>Name (A-Z) </Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><DateRange/><Typography onClick={handleSortByPublishDate}>Publish Date (Newest)</Typography></MenuItem>
@@ -74,6 +82,21 @@ export default function AppNav(props) {
             <MenuItem onClick={handleMenuClose}><RecommendOutlined/><Typography onClick={handleSortByLikes}>Likes (High - Low)</Typography></MenuItem>
             <MenuItem onClick={handleMenuClose}><RecommendOutlined style={{transform: 'scaleY(-1)'}}/><Typography onClick={handleSortByDislikes}>Dislikes (High - Low)</Typography></MenuItem>
         </Box>
+    
+    const homeMenu = 
+        <Box>
+            <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={handleSortByCreationDate}>Creation Date (old-new) </Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={handleSortByLastEditDate}>Last Edit Date (new-old) </Typography></MenuItem>
+            <MenuItem onClick={handleMenuClose}><SortByAlpha/><Typography onClick={handleSortByName}>Name (A-Z) </Typography></MenuItem>
+        </Box>
+    
+    let menu = nonHomeMenu;
+    if(store){
+        if(store.currentSelection == 'HOME'){
+            menu = homeMenu
+        }
+    }
+
     return(
         <AppBar position="static" elevation='0' style={{backgroundColor:"rgba(255, 0, 0, 0)"}}>
             <Container maxWidth={false}>
